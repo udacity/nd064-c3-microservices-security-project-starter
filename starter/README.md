@@ -14,6 +14,17 @@ Once the Microservice environment is hardened and provisioned, we will configure
 
 No stress, you have tools and security incident response knowledge to respond ;) Your goal will be to evaluate Grafana to determine what the unknown binary is, contain and remediate the environment, write an incident response report and present it to the CTO. There will be a few hidden easter eggs, see if you can find them for extra credit. 
 
+### Prequisites
+
+* Docker Desktop
+* Python 3.x
+* Kubernetes
+* Vagrant
+* Virtual Box
+* Grafana
+* Visual Studio Code
+
+
 ### Tasks
 **Section 1- Threat Model the Microservices Environment** 
 * Clone the [starter project](https://github.com/udacity/nd064-c3-Microservices-Security-project-starter) to begin evaluating and threat modeling your microservices environment.
@@ -30,18 +41,20 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Using the linux baseline hardening PDF from the starter files, review the findings and harden the open-suse instance for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the linux-bench run. Document each finding you hardened in `docs/security_threat_model_linux_image.txt`.
 * Apply changes to the opensuse image to harden the five weaknesses you threat modeled as security concerns. You may need to reference [the open-suse security hardening. documentation](https://doc.opensuse.org/documentation/leap/security/single-html/book-security/index.html) as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exception not the rule. 
 * Re-run linux-bench to verify that the 5 findings have been addressed, taking a screenshot of the file for your submission and save as `docs/suse_base_image_hardened.png`.
+* Repackage the open-suse box to create a new box. Make notes of the image location on your local disk, you will use this hardened opensus base image in the next steps to create a docker image with a Dockerfile.
 ###### 2b- Create a hardened docker container
-* Deploy the hardened opensuse linux base image to create a hardend docker image with [docker -bench](https://github.com/aquasecurity/docker-bench).
-* Create a docker file using the hardened open-suse image. Install all dependencies. Reminder: go dependences and docker-bench needs to be built and installed from source as per the exercise.
+* Using the hardened opensuse base image, create a docker image and harden with [docker-bench](https://github.com/aquasecurity/docker-bench).
+* Using the baseline starter code, edit the `Dockerfile` and`docker-compose.yaml` files to import the hardend open-suse image, install all dependencies and build the docker. Test run the docker to ensure its starts successfully. Reminder: go dependences and docker-bench needs to be built and installed from source as per the exercise.
 * Run docker-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
 * Using the docker baseline hardening PDF from the starter files, review the findings and harden the docker image for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_docker_image.txt`.
 * Apply changes to the docker file to harden the five weaknesses you threat modeled. You may need to reference the docker documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
+* Ensure the container starts up stable post hardening.
 * Re-run docker-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/suse_docker_image_hardened.png`
-* Commit the hardend docker image to your private docker registry you created during the exercise.
+* Commit the hardend docker image to your private docker registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
 ###### 2c- Deploy the docker container to a hardened kubernetes cluster
-* Create a Kubernetes cluster using the hardened docker container from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
+* Create a Kubernetes cluster using the hardened docker container image from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
 * Create a K3S cluster using the hardened container. Install all dependencies. Reminder: kube-bench needs to be built and installed from source as per the exercise.
-* Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as      `docs/suse_docker_image_out_of_box.png`.
+* Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
 * Using the kubernetes baseline hardening PDF from the starter files, review the findings and harden the docker image for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
 apply changes to the cluster to harden the five weaknesses you threat modeled. You may need to reference the kubernetes documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
 * Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_cluster_hardened.png`.

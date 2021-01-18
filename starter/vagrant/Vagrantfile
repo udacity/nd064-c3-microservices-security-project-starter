@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.require_version ">= 2.2.14
+Vagrant.configure("2") do |config|
+  config.vm.box = "opensuse/Leap-15.2.x86_64"
+  config.vm.define "master" do |master|
+    master.vm.box = default_box
+    master.vm.hostname = "master"
+    master.vm.network 'private_network', ip: "192.168.0.200",  virtualbox__intnet: true
+    master.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", disabled: true
+    master.vm.network "forwarded_port", guest: 22, host: 2000 # Master Node SSH
+    master.vm.network "forwarded_port", guest: 6443, host: 6443 # API Access
+    for p in 30000..30100 # expose NodePort IP's
+      master.vm.network "forwarded_port", guest: p, host: p, protocol: "tcp"
+      end
+    master.vm.provider "virtualbox" do |v|
+      v.memory = "3072"
+      v.name = "master"
+      end
+    master.vm.provision "shell", inline: <<-SHELL
+      sudo zypper refresh
+      sudo zypper up
+      sudo zypper --non-interactive install bzip2
+      sudo zypper --non-interactive install etcd
+      sudo zypper --non-interactive install go
+      sudo zypper --non-interactive install git-core
+    SHELL
+  end
