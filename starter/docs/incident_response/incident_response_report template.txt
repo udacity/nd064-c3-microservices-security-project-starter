@@ -1,0 +1,20 @@
+###incident_response_report template###
+
+## Incident responder: <name>
+
+## What happened to the system:
+
+## What was the payload:
+
+## How was this identified:
+
+## What is the probable root cause:
+
+## What is the impact to the system:
+
+## What steps were taken to remediate the system
+
+## What steps will you take to prevent this payload from running
+
+
+
