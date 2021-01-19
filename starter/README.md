@@ -3,27 +3,26 @@ Security is a highly dynamic topic with ever changing threats and priorities. Ne
 
 Security is becoming harder as the velocity of deployments is accelerating. The [Synopsis 2020 Open Source Security Risk Analysis Report](https://webcache.googleusercontent.com/search?q=cache:yUCraGVAdw8J:https://www.synopsys.com/content/dam/synopsys/sig-assets/reports/2020-ossra-report.pdf+&cd=1&hl=en&ct=clnk&gl=us) revealed that 99% of audited code bases contained open source, and within those codebases 75% of vulnerabilities were left unpatched, creating risk. Incorporating security checks into each step of the build and deployment process is vital to identify security defects beore they hit production.
 
-Your company CTO is worried about what your engineering team is doing to harden and monitor the company's new microservice application against malicious threat actors and payloads. You’ve completed the exerces in the course and have a baseline understanding of how to approach this.
-
-In response to the CTOs concerns students will threat model, build and harden a microservices environment based on what they learned from the exercises.
+Your company CTO is worried about what your engineering team is doing to harden and monitor the company's new microservice application against malicious threat actors and payloads. You’ve completed the exercies in the course and have a baseline understanding of how to approach this. In response to the CTOs concerns students will threat model, build and harden a microservices environment based on what they learned from the exercises.
 
 ### Goal 
-You will be presented with the challenge to build a secure Microservice environment, threat modeling and hardening the base image, container image, run-time environment and application itself. For purposes of the project, you will be provided with instructions to build, harden, ship and run  an environment analogous to the company's new microservice application, simplified for project purpoes. In the project you will define and build a new environment from the ground-up. In a real-world scenario you may have an existing envrionment or may build parts or all net-new, regardless, the tools and techniques in the project are directly applicable.
+You will be presented with the challenge to build a secure Microservice environment, threat modeling and hardening the base image, container image, run-time environment and application itself. For purposes of the project, you will be provided with instructions to build, harden, ship and run  an environment analogous to the company's new microservice application, simplified for project purposes. In the project you will define and build a new environment from the ground-up. 
 
-Once the Microservice environment is hardened and provisioned, we will configure [sysdig Falco](https://github.com/falcosecurity/falco) to perform run-time monitoring on the node, sending logs to a Grafana node for visualization. To demonstrate to the CTO that the company can respond to a real security event, you will then simulate a [tabletop cyber exercise](https://www.fireeye.com/mandiant/tabletop-exercise.html) by running a script to introduce an unknown binary from the starter code that will disrupt the environment! 
+In a real-world scenario, you may have an existing envrionment that needs to be hardened or may decided to re-build parts or all net-new, regardless, the tools and techniques in the project are directly applicable. The beauty of microservices vs a monolith architecture is that all core components (image, container, run-time, application) are abstracted allowed for isolation boundaries and iterative development. In the real-world, you could chose to harden and redeploy all base-images as one project phase and tackle docker security, kubernetes and the application workloads separately. The best approach is to bake these requirements and security hardening into the build and deploy process. In an enterprise setting, much of this can be enforced via security units test via CI/CD prior to deployment. Integrating security into the CI/CD is beyond the scope of this project and course, reference the additional considerations section for more on this. 
+
+For the project, once the Microservice environment is hardened and provisioned, we will configure [sysdig Falco](https://github.com/falcosecurity/falco) to perform run-time monitoring on the node, sending logs to a Grafana node for visualization. To demonstrate to the CTO that the company can respond to a real security event, you will then simulate a [tabletop cyber exercise](https://www.fireeye.com/mandiant/tabletop-exercise.html) by running a script to introduce an unknown binary from the starter code that will disrupt the environment! 
 
 No stress, you have tools and security incident response knowledge to respond ;) Your goal will be to evaluate Grafana to determine what the unknown binary is, contain and remediate the environment, write an incident response report and present it to the CTO. There will be a few hidden easter eggs, see if you can find them for extra credit. 
 
 ### Prequisites
 
-* Docker Desktop
-* Python 3.x
-* Kubernetes
-* Vagrant
-* Virtual Box
-* Grafana
-* Visual Studio Code
-
+* Docker Desktop ≥18.09
+* Python ≥3.0
+* K3S ≥v1.20.2
+* Vagrant ≥2.2.14
+* Virtual Box ≥6.1
+* Grafana ≥7.3
+* Visual Studio Code ≥1.52
 
 ### Tasks
 **Section 1- Threat Model the Microservices Environment** 
@@ -36,7 +35,7 @@ No stress, you have tools and security incident response knowledge to respond ;)
 **Section 2- Harden the Microservices Environment**
 ###### 2a- Harden the opensuse linux base image
 * Harden, build and scan the opensuse linux base image using [linux bench](https://github.com/aquasecurity/linux-bench)
-* Using the provided Vagrant file in the starter repo, deploy `open-suse/Leap-15.2.x86_64`. Install all dependencies. Reminder: go dependences and linux-bench needs to be built and installed from source as per the exercise.
+* Using the provided Vagrant file in the starter repo, deploy `open-suse/Leap-15.2.x86_64`. Install all dependencies. Reminder: go dependencies and linux-bench needs to be built and installed from source as per the exercise.
 * Run linux-bench for the first time with the base CIS profile. Take a screenshot of the results saving as `docs/suse_base_image_out_of_box`.
 * Using the linux baseline hardening PDF from the starter files, review the findings and harden the open-suse instance for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the linux-bench run. Document each finding you hardened in `docs/security_threat_model_linux_image.txt`.
 * Apply changes to the opensuse image to harden the five weaknesses you threat modeled as security concerns. You may need to reference [the open-suse security hardening. documentation](https://doc.opensuse.org/documentation/leap/security/single-html/book-security/index.html) as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exception not the rule. 
@@ -55,11 +54,11 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Create a Kubernetes cluster using the hardened docker container image from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
 * Create a K3S cluster using the hardened container. Install all dependencies. Reminder: kube-bench needs to be built and installed from source as per the exercise.
 * Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
-* Using the kubernetes baseline hardening PDF from the starter files, review the findings and harden the docker image for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
+* Using the kubernetes baseline hardening PDF and YAML from the starter files, review the findings and apply at least one hardening step per the 5 kube-bench-[primitive].yaml files for the identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
 apply changes to the cluster to harden the five weaknesses you threat modeled. You may need to reference the kubernetes documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
 * Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_cluster_hardened.png`.
 
-**Section 3- Harden and Deploy the Flask App**
+**Section 3- Harden and Deploy the Flask App** [maybe remove for scope reduction]
 * Configure and run [grype-vscode](https://github.com/anchore/grype-vscode) in Visual Studio Code to identify software composition vulnerabilities, remediate and deploy the app. 
 * The application has intentional security flaws that you need to identify and remediate using your knowledge and grype. There are five vulnerabilities, you will need to find and remediate at least three to get full points for this portion of the project, extra points for more than three.
 * Run a scan manually for the first time, take a screenshot of Grype findings in VSC IDE `tools/grype/grype_app_out_of_box.png`.
@@ -83,4 +82,10 @@ apply changes to the cluster to harden the five weaknesses you threat modeled. Y
 * Pivot to Grafana to see if you can identify the payload andd take steps to remediate.
 For extra points, create a Grafana panel to monitor this type of payload.
 * From the /docs folder, use the incident_response_report.txt template to create a report outlining lessons learned, findings and actionable takeaways.
+
+**Additional Considerations**
+In an enterprise setting, many of the microservice security hardening techniques should be baked into the build and deployment process. First and foremost, security requirements should be defined at the onset of the development lifecycle. Ideallly, security requirements shouild be declarative and programmatic, enforced with security units test via CI/CD prior to deployment. Builds that dont pass security checks should ideally fail, providing substantive telemetry for the engineering team to address the regression. For further reading on this, consider the following resources:
+* [The Phoenix Project](https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592)
+* [DevSecOps Project](https://devsecops.github.io/) 
+* [Security in DevOps](https://www.amazon.com/Hands-Security-DevOps-continuous-deployment/dp/1788995503)
 
