@@ -83,7 +83,7 @@ apply changes to the cluster to harden the five weaknesses you threat modeled. Y
 For extra points, create a Grafana panel to monitor this type of payload.
 * From the /docs folder, use the incident_response_report.txt template to create a report outlining lessons learned, findings and actionable takeaways.
 
-**Additional Considerations**
+### Additional Considerations
 In an enterprise setting, many of the microservice security hardening techniques should be baked into the build and deployment process. Covering this in detail is beyond the scope of this course. First and foremost, security requirements should be defined at the onset of the development lifecycle and integrated as functional requirements. Ideallly, security requirements shouild be declarative and programmatic, enforced with security units test via PR webhooks or CI/CD prior to deployment. Ensuring security requirements should be a category of QA, you should't ship an application with functional bugs, same goes for secudrity bugs. Builds that dont pass security checks should ideally fail, providing substantive telemetry for the engineering team to address the regression. For further reading on this, consider the following resources:
 * [The Phoenix Project](https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592)
 * [DevSecOps Project](https://devsecops.github.io/) 
