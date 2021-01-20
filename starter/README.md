@@ -45,7 +45,7 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Re-run docker-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/suse_docker_image_hardened.png`
 * Commit the hardend docker image to your private docker registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
 
-###### 2b- Deploy the docker container to a hardened kubernetes cluster
+	###### 2b- Deploy the docker container to a hardened kubernetes cluster
 * Create a Kubernetes cluster using the hardened docker container image from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
 * Create a K3S cluster using the hardened container. Install all dependencies. Reminder: kube-bench needs to be built and installed from source as per the exercise.
 * Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
