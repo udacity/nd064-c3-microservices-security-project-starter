@@ -24,19 +24,14 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Grafana ≥7.3
 * Visual Studio Code ≥1.52
 
-
-## Getting Started
+### Getting Started
 You can find detailed instructions for getting the project set up and running in the [Project README](https://github.com/udacity/nd064-c3-Microservices-Security-project-starter/blob/master/README.md).
-
-### Running The Project
-
-You can find detailed instructions for getting the project set up and running  in the [Project README](https://github.com/udacity/nd064-c3-Microservices-Security-project-starter/blob/master/README.md).
 
 ###  Architecture Diagrams
 
 Your architecture diagram should focus on the services and how they talk to one another. For our project, we want the diagram in a `.png` format. Some popular free software and tools to create architecture diagrams:
 1. [Lucidchart](https://www.lucidchart.com/pages/)
-2. [Google Docs](docs.google.com) 
+2. [Google Docs](docs.google.com)
 3. [Diagrams.net](https://app.diagrams.net/)
 
 ### Project Advice
@@ -48,8 +43,7 @@ This project should be submitted as either a zipped folder or a GitHub repo.  Th
 Before submitting, please check the [Project Rubric](foo) to confirm that you have met all specifications.
 
 ### Your Zipped Folder or Project Repo Should Include
-|    | |
-|-------------------------|--------------------------------------------------------------------------------------------------------------|
+
 The completed project must include: 
 | <input type="checkbox"> | Instructions and commands on how to run the project in the project `README`|
 | <input type="checkbox"> | Security architecture diagram named `docs/security_architecture_design.png`|
@@ -58,15 +52,14 @@ The completed project must include:
 | <input type="checkbox"> | Screenshot of out of box docker-bench evaluation docker image named `docs/suse_docker_image_out_of_box.png` |
 | <input type="checkbox"> | Screenshot of hardened docker-bench evaluation docker image named `docs/suse_docker_image_hardened.png`|
 | <input type="checkbox"> | Screenshot of anchore/grype ran in the IDE to identify flask app vulnerability named `docs/grype_implemented.png`|
-| <input type="checkbox"> | Screenshot of Grype running in Visual Studio Code `tools/grype/grype_app_out_of_box.png`|
-| <input type="checkbox"> | Screenshot of Grype running in Visual Studio Code `tools/grype/grype_app_hardened.png`|
+| <input type="checkbox"> | Screenshot of Grype running in VSC IDE `tools/grype/grype_app_out_of_box.png`|
+| <input type="checkbox"> | Screenshot of Grype running in VSC IDE `tools/grype/grype_app_hardened.png`|
 | <input type="checkbox"> | Screenshot of `kubectl get services` with falco running named `docs/kube_services_screenshot.png`|
 | <input type="checkbox"> | Document evaluating five falco rules using STRIDE`docs/security_threat_model_falco_rules.txt`|
 | <input type="checkbox"> | Custom Falco rule set`tools/falcon/falco_local_applied_baseline.yaml`|
 | <input type="checkbox"> | Screenshot of Grafana instance running with a panel for visualizing falco logs `docs/grafana_implemented.png`|
 | <input type="checkbox"> | Incident response report to the CTO named `docs/incident_response_report.txt`|
 | <input type="checkbox"> | All project code|
-
 
 ### Tasks
 **Section 1- Threat Model the Microservices Environment** 
