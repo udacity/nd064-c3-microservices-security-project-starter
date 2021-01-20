@@ -45,21 +45,21 @@ Before submitting, please check the [Project Rubric](foo) to confirm that you ha
 ### Your Zipped Folder or Project Repo Should Include
 
 The completed project must include: 
-| <input type="checkbox"> | Instructions and commands on how to run the project in the project `README`|
-| <input type="checkbox"> | Security architecture diagram named `docs/security_architecture_design.png`|
-| <input type="checkbox"> | Document justifying your overall security threat model named `docs/security_threat_model.txt`|
-| <input type="checkbox"> | Document justifying your docker image security threat model named`docs/security_threat_model_docker_image.txt`|
-| <input type="checkbox"> | Screenshot of out of box docker-bench evaluation docker image named `docs/suse_docker_image_out_of_box.png` |
-| <input type="checkbox"> | Screenshot of hardened docker-bench evaluation docker image named `docs/suse_docker_image_hardened.png`|
-| <input type="checkbox"> | Screenshot of anchore/grype ran in the IDE to identify flask app vulnerability named `docs/grype_implemented.png`|
-| <input type="checkbox"> | Screenshot of Grype running in VSC IDE `tools/grype/grype_app_out_of_box.png`|
-| <input type="checkbox"> | Screenshot of Grype running in VSC IDE `tools/grype/grype_app_hardened.png`|
-| <input type="checkbox"> | Screenshot of `kubectl get services` with falco running named `docs/kube_services_screenshot.png`|
-| <input type="checkbox"> | Document evaluating five falco rules using STRIDE`docs/security_threat_model_falco_rules.txt`|
-| <input type="checkbox"> | Custom Falco rule set`tools/falcon/falco_local_applied_baseline.yaml`|
-| <input type="checkbox"> | Screenshot of Grafana instance running with a panel for visualizing falco logs `docs/grafana_implemented.png`|
-| <input type="checkbox"> | Incident response report to the CTO named `docs/incident_response_report.txt`|
-| <input type="checkbox"> | All project code|
+Instructions and commands on how to run the project in the project `README`
+Security architecture diagram named `docs/security_architecture_design.png`
+Document justifying your overall security threat model named `docs/security_threat_model.txt`
+Document justifying your docker image security threat model named`docs/security_threat_model_docker_image.txt`
+Screenshot of out of box docker-bench evaluation docker image named `docs/suse_docker_image_out_of_box.png` 
+Screenshot of hardened docker-bench evaluation docker image named `docs/suse_docker_image_hardened.png`
+Screenshot of anchore/grype ran in the IDE to identify flask app vulnerability named `docs/grype_implemented.png`
+Screenshot of Grype running in VSC IDE `tools/grype/grype_app_out_of_box.png`
+Screenshot of Grype running in VSC IDE `tools/grype/grype_app_hardened.png`
+Screenshot of `kubectl get services` with falco running named `docs/kube_services_screenshot.png`
+Document evaluating five falco rules using STRIDE`docs/security_threat_model_falco_rules.txt`
+Custom Falco rule set`tools/falcon/falco_local_applied_baseline.yaml`
+Screenshot of Grafana instance running with a panel for visualizing falco logs `docs/grafana_implemented.png`
+Incident response report to the CTO named `docs/incident_response_report.txt`
+All project code
 
 ### Tasks
 **Section 1- Threat Model the Microservices Environment** 
