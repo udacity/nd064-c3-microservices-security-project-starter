@@ -30,9 +30,9 @@ can be honest or false
 **Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 
 
-***Hardened Docker Weaknesses**
+***Hardening Docker Weaknesses**
 
-e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to tampering.
+e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to modification of key system files.
 
 
 1. 
@@ -55,7 +55,7 @@ e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non
 **Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 
 
-***Hardened Kubernetes Weaknesses**
+***Hardening Kubernetes Weaknesses**
 
 e.g. 1. Elevation of Privilege - Master node API server pod configuration files should not have overly permissive permissions (e.g. 777). These files control the behavior of the API server pod, overly permissive permissions may allow changes by non-administrators.
 
@@ -78,9 +78,9 @@ https://thoughtworksinc.github.io/sensible-security-conversations/materials/Sens
 
 The OWASP Top 10 is a standard and process web application security for engineers. It represents a broad consensus about the most critical security risks to web applications.
 
-Authored in the early 2000s be members of the OWASP project, it has become the defect standard for threat modeling application security risk.
+Authored in the early 2000s be members of the OWASP project, it has become the defecto standard for threat modeling application security risk.
 
-Security is not a product, its a process Bruce Schneier [Leading cryptographer, computer security professional, privacy specialist and supporter of OWASP] 
+"Security is not a product, its a process" - Bruce Schneier [Leading cryptographer, computer security professional, privacy specialist and supporter of OWASP] 
 
 * Injection. Injection flaws, such as SQL, NoSQL, OS, and LDAP injection, occur when untrusted data is sent to an interpreter as part of a command or query. The attacker’s hostile data can trick the interpreter into executing unintended commands or accessing data without proper authorization.
 
@@ -127,7 +127,7 @@ https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html
 
 e.g. 1. 
 
-Falco rule:
+Sample falco rule:
 
 - macro: spawned_process
   condition: evt.type = execve and evt.dir=<
