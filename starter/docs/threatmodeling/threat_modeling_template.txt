@@ -29,7 +29,17 @@ can be honest or false
 
 **Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 
+
+***Hardened Docker Weaknesses**
+
 e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to tampering.
+
+
+1. 
+2. 
+3.
+4.
+5.
 
 
 **Kubernetes Threat Model**
@@ -44,8 +54,16 @@ e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non
 
 **Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 
+
+***Hardened Kubernetes Weaknesses**
+
 e.g. 1. Elevation of Privilege - Master node API server pod configuration files should not have overly permissive permissions (e.g. 777). These files control the behavior of the API server pod, overly permissive permissions may allow changes by non-administrators.
 
+1. 
+2. 
+3.
+4.
+5.
 
 References for reviews as you have not completed the lessons yet and may not know STRIDE:
 
@@ -88,6 +106,12 @@ Security is not a product, its a process Bruce Schneier [Leading cryptographer, 
 
 e.g. 1. Sensitive Data Exposure - Secrets for the Flask application stored at in plain text may be leaked if the source code is compromised.
 
+1. 
+2.
+3.
+4.
+5.
+
 
 References for reviews as you have not completed the lessons yet and may not know OWASP:
 
@@ -95,7 +119,29 @@ https://owasp.org/www-project-top-ten/2017/
 https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html
 
 
+**Falco Threat Model**
 
+* Investigate the default Falco rules file located at /etc/falco/falco_rules.yaml. It contains a predefined set of rules designed to provide good coverage in a variety of situations.
+
+* Assess at least five threats to identify which threats the rule may identify and document why.
+
+e.g. 1. 
+
+Falco rule:
+
+- macro: spawned_process
+  condition: evt.type = execve and evt.dir=<
+
+Tampering - Spawning a shell may be indicative of lateral movement.
+
+1.
+2.
+3.
+4.
+5.
+
+
+**You should now have 20 total observations in the threat modeling file, Inclusive of Docker, Kubernetes, Flask app and Falco**
 
 
 

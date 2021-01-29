@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.0-experimental
 
 #define base image; replace with your image location
-FROM localuser/suse_base_image_hardened:v1
+FROM localuser/suse_base_image:v1
 
 #define maintiner 
 LABEL maintainer="nick.reva@snap.com"
