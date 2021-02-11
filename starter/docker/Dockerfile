@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.0-experimental
 
-#define base image; replace with your image location
-FROM localuser/suse_base_image:v1
+#define base image; replace with your image location once hardened
+FROM opensuse/Leap-15.2.x86_64
 
 #define maintiner 
 LABEL maintainer="nick.reva@snap.com"
