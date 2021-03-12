@@ -16,6 +16,7 @@ can be honest or false
 * Denial of Service - Exhausting resources needed to provide service
 * Elevation of Privilege - Allowing someone to do something they are not authorized to do
 
+* Step 1: Thread Model The Microservices Environment
 
 **Docker Threat Model**
 
@@ -25,21 +26,12 @@ can be honest or false
 
 **Provide the core docker system entities**
 
+
 **Todo: Provide a profile of potential attackers, including their goals and methods**
 
 **Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 1.
 2.
-3.
-4.
-5.
-
-**Todo: Hardening Docker Weaknesses**
-
-e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to modification of key system files.
-
-1. 
-2. 
 3.
 4.
 5.
@@ -58,6 +50,19 @@ e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non
 **Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 1.
 2.
+3.
+4.
+5.
+
+
+* Step 2: Harden The Microservices Environment
+
+**Todo: Hardening Docker Weaknesses**
+
+e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to modification of key system files.
+
+1. 
+2. 
 3.
 4.
 5.
