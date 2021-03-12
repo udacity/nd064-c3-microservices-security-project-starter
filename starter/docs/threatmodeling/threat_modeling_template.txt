@@ -25,15 +25,18 @@ can be honest or false
 
 **Provide the core docker system entities**
 
-**Provide a profile of potential attackers, including their goals and methods**
+**Todo: Provide a profile of potential attackers, including their goals and methods**
 
-**Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+**Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+1.
+2.
+3.
+4.
+5.
 
-
-***Hardening Docker Weaknesses**
+**Todo: Hardening Docker Weaknesses**
 
 e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non-trusted user is added to the trusted group they could tamper with the system leading to modification of key system files.
-
 
 1. 
 2. 
@@ -50,12 +53,16 @@ e.g. 1. Tampering- Only trusted users should control the docker daemon. If a non
 
 **Provide the core Kubernetes system entities**
 
-**Provide a profile of potential attackers, including their goals and methods**
+**Todo: Provide a profile of potential attackers, including their goals and methods**
 
-**Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+**Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+1.
+2.
+3.
+4.
+5.
 
-
-***Hardening Kubernetes Weaknesses**
+**Todo:Hardening Kubernetes Weaknesses**
 
 e.g. 1. Elevation of Privilege - Master node API server pod configuration files should not have overly permissive permissions (e.g. 777). These files control the behavior of the API server pod, overly permissive permissions may allow changes by non-administrators.
 
