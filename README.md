@@ -34,19 +34,19 @@ No stress, you have tools and security incident response knowledge to respond ;)
 
 **Section 2- Harden the Microservices Environment**
 ###### 2a- Create a hardened docker container
-* For the purpose of the project, we will source a secure opensuse base image from SUSE. For the purpose of the project, we will source a secure opensuse leap base image from SUSE. Using a trustworthy base image that is provided by a well trusted provider such as SUSE is vital. The SUSE team goes through multiple steps to check the image integrity prior to deployment. The SUSE base image have been code signed which provides assurances the provided image has not been tampered with.
+* For the purpose of the project, we will source a secure opensuse base image from SUSE. Using a trustworthy base image that is provided by a well trusted provider such as SUSE is vital. The SUSE team goes through multiple steps to check the image integrity prior to deployment. The SUSE base image have been code signed which provides assurances the provided image has not been tampered with.
 * Minimally, it is recommended to verify the integrity of the image you plan to use by using GPG to verify the image sha256 checksum.
 * Inspecting and further hardening the base image is beyond the scope of this project and scope. Please consider investigating [linux bench](https://github.com/aquasecurity/linux-bench) as a well established tool for introspecting and hardening base linux distributions. 
-* Using the hardened opensuse base image, create a docker image and harden with [docker-bench](https://github.com/aquasecurity/docker-bench).
-* Using the baseline starter code, edit the `Dockerfile` and`docker-compose.yaml` files to import the hardend open-suse image, install all dependencies and build the docker. Test run the docker to ensure its starts successfully. Reminder: go dependences and docker-bench needs to be built and installed from source as per the exercise.
+* Using the hardened opensuse base image, create a docker image and harden your docker environment with [docker-bench](https://github.com/aquasecurity/docker-bench).
+* Using the baseline starter code, edit the `Dockerfile` file to import the hardend open-suse image, install all dependencies and build the docker. Test run the docker to ensure its starts successfully. Reminder: go dependences and docker-bench needs to be built and installed from source as per the exercise.
 * Run docker-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
 * Using the docker baseline hardening PDF from the starter files, review the findings and harden the docker image for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_docker_image.txt`.
 * Apply changes to the docker file to harden the five weaknesses you threat modeled. You may need to reference the docker documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
 * Ensure the container starts up stable post hardening.
 * Re-run docker-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/suse_docker_image_hardened.png`
-* Commit the hardend docker image to your private docker registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
+* Commit the hardend docker image to your private docker hub registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
 
-	###### 2b- Deploy the docker container to a hardened kubernetes cluster
+###### 2b- Deploy the docker container to a hardened kubernetes cluster
 * Create a Kubernetes cluster using the hardened docker container image from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
 * Create a K3S cluster using the hardened container. Install all dependencies. Reminder: kube-bench needs to be built and installed from source as per the exercise.
 * Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
@@ -55,7 +55,7 @@ apply changes to the cluster to harden the five weaknesses you threat modeled. Y
 * Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_cluster_hardened.png`.
 
 **Section 3- Harden and Deploy the Flask App** [maybe remove for scope reduction]
-* Configure and run [grype-vscode](https://github.com/anchore/grype-vscode) in Visual Studio Code to identify software composition vulnerabilities, remediate and deploy the app. 
+* Configure and run [grype-vscode](https://github.com/anchore/grype-vscode) in Visual Studio Code to identify software composition vulnerabilities, remediate and deploy the provided Flask app. 
 * The application has intentional security flaws that you need to identify and remediate using your knowledge and grype. There are five vulnerabilities, you will need to find and remediate at least three to get full points for this portion of the project, extra points for more than three.
 * Run a scan manually for the first time, take a screenshot of Grype findings in Visual Studio Code  `tools/grype/grype_app_out_of_box.png`.
 * Identify the vulnerable files and remediate the code flaws. If you get stuck on how to remediate, reference the exercise on OWASP-10 vulnerability classes.
@@ -67,7 +67,7 @@ apply changes to the cluster to harden the five weaknesses you threat modeled. Y
 * Following instructions from Course 4, [Starting with Dashboards](https://classroom.udacity.com/nanodegrees/nd064-beta/parts/49b578d8-9829-425d-a25f-8d15663d4506/modules/19323279-ee64-4704-8346-8109d7ba54a0/lessons/6ced7264-046e-4dfd-93c7-951eb565293f/concepts/cb022950-9920-40fb-bf9e-3c014306163b) to deploy a Grafana cluster.
 * Following instructions from Course 4, [Panels](https://classroom.udacity.com/nanodegrees/nd064-beta/parts/49b578d8-9829-425d-a25f-8d15663d4506/modules/19323279-ee64-4704-8346-8109d7ba54a0/lessons/6ced7264-046e-4dfd-93c7-951eb565293f/concepts/6b252e12-d3ed-45ce-8e01-cc179112bb5a) to configure a Grafana panel.
 * Using [falco](https://github.com/falcosecurity/falco), implement run-time security monitoring via sysdig falco with kubernetes audit rules and configure logging to Grafana.
-* Install falco to the host opensuse Vagrant box and all dependencies. Reminder: Ensure to trust the falcosecurity GPG key and install kernel headers.
+* Install falco and all dependencies to the cluser. Reminder: Ensure to trust the falcosecurity GPG key and install kernel headers.
 * Investigate the default falco rules file located at /etc/falco/falco_rules.yaml. It contains a predefined set of rules designed to provide good coverage in a variety of situations. 
 * Vim the falco rules file and pick five rules to evaluate. Using STRIDE, assess which threats the rules may identify, save this as `docs/security_threat_model_falco_rules.txt`.
 * Falco also allows custom rules to be defined. Following the syntax in /etc/falco/falco_rules.yaml, create at least one new rule in the local rule base located at /etc/falco/falco_rules.local.yaml. Note: Reference the [Falco field guide](https://falco.org/docs/rules/supported-fields) for available examples, update `docs/security_threat_model_falco_rules.txt` with the new rule.
