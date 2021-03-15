@@ -16,16 +16,13 @@ can be honest or false
 * Denial of Service - Exhausting resources needed to provide service
 * Elevation of Privilege - Allowing someone to do something they are not authorized to do
 
-* Step 1: Thread Model The Microservices Environment
+* Step 1: Threat Model The Microservices Environment
 
 **Docker Threat Model**
 
-**Provide an abstraction of the system**
+**Provide the system attack surface
 
-**Provide the boundaries of the system**
-
-**Provide the core docker system entities**
-
+**Provide how the system provides isolation**
 
 **Todo: Provide a profile of potential attackers, including their goals and methods**
 
@@ -39,11 +36,9 @@ can be honest or false
 
 **Kubernetes Threat Model**
 
-**Provide an abstraction of the system**
+**Provide the system attack surface
 
-**Provide the boundaries of the system**
-
-**Provide the core Kubernetes system entities**
+**Provide how the system provides isolation**
 
 **Todo: Provide a profile of potential attackers, including their goals and methods**
 
