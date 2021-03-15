@@ -12,9 +12,7 @@
 
 ## What is the impact to the system:
 
-## What steps were taken to remediate the system
-
-## What steps will you take to prevent this payload from running
+## What steps will you take to look for this payload in the future:
 
 
 
