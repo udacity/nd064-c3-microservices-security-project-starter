@@ -20,13 +20,17 @@ can be honest or false
 
 **Docker Threat Model**
 
-**Provide the system attack surface
+**Referencing the Threat Modeling with STRIDE lesson, provide the Docker Boundaries and High-Level System Components**
+
+**Referencing the Threat Modeling with STRIDE lesson, provide the system attack surface**
 
 **Provide how the system provides isolation**
 
-**Todo: Provide a profile of potential attackers, including their goals and methods**
+**Provide a summary of what could go wrong**
 
-**Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+**Provide a profile of potential attackers, including their goals and methods**
+
+**Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 1.
 2.
 3.
@@ -36,13 +40,15 @@ can be honest or false
 
 **Kubernetes Threat Model**
 
-**Provide the system attack surface
+**Referencing the Threat Modeling with STRIDE lesson, provide the Kubernertes Service Boundaries**
 
-**Provide how the system provides isolation**
+**Referencing the Threat Modeling with STRIDE lesson, provide the system attack surface**
 
-**Todo: Provide a profile of potential attackers, including their goals and methods**
+**Provide a summary of what could go wrong**
 
-**Todo: Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
+**Provide a profile of potential attackers, including their goals and methods**
+
+**Given system primitives and the STRIDE, identify at least 5 potential threats that may arise**
 1.
 2.
 3.
