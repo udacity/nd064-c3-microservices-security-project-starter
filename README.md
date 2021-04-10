@@ -39,28 +39,30 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Inspecting and further hardening the base image is beyond the scope of this project and scope. Please consider investigating [linux bench](https://github.com/aquasecurity/linux-bench) as a well established tool for introspecting and hardening base linux distributions. 
 * Using the hardened opensuse base image, create a docker image and harden your docker environment with [docker-bench](https://github.com/aquasecurity/docker-bench).
 * Using the baseline starter code, edit the `Dockerfile` file to import the hardend open-suse image, install all dependencies and build the docker. Test run the docker to ensure its starts successfully. Reminder: go dependences and docker-bench needs to be built and installed from source as per the exercise.
-* Run docker-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
-* Using the docker baseline hardening PDF from the starter files, review the findings and harden the docker image for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_docker_image.txt`.
+* Run docker-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_environment_out_of_box.png`.
+* Using the docker baseline hardening PDF from the starter files, review the findings and harden the docker environment for the five identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_docker_environment.txt`.
 * Apply changes to the docker file to harden the five weaknesses you threat modeled. You may need to reference the docker documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
 * Ensure the container starts up stable post hardening.
-* Re-run docker-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/suse_docker_image_hardened.png`
+* Re-run docker-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/suse_docker_environment_hardened.png`
 * Commit the hardend docker image to your private docker hub registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
 
-###### 2b- Deploy the docker container to a hardened kubernetes cluster
-* Create a Kubernetes cluster using the hardened docker container image from the registry. Use the provided Rancher security scan container to harden the cluster.
-* Create a RKE cluster using the hardened container. Install all dependencies. 
-* Run kube-bench for the first time with the hardened profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
-* Using the Rancher RKE kubernetes baseline hardening PDF and YAML from the starter files, review the findings and apply at least one hardening step per the provided CIS files with the Rancher security scan container yaml files for the identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
-apply changes to the cluster to harden the five weaknesses you threat modeled. You may need to reference the kubernetes documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
-* Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_cluster_hardened.png`.
+###### 2b- Deploy a hardened kubernetes cluster
+* Create a RKE Kubernetes 2 node cluster using the provided Vagrantfile.
+* Run kube-bench for the first time on node1 with the permissive profile with the provided Rancher security scan container `rancher/security-scan:v0.2.2`
+* Take a screenshot of the results saving as `docs/kube_rke_permissive_scan.png`.
+* Follow the [Rancher provided instructions](https://rancher.com/docs/rancher/v2.x/en/security/rancher-2.5/1.6-hardening-2.5/) to revise the provided non-hardened cluster.yaml file in the project start to harden as required. This will require you to closely inspect both the provided `cluster.yaml` and the rancher hardened `cluster.yaml` and make changes. Save a copy of the hardened `cluster.yaml` as `docs/hardened_cluster.yaml` and submit with the project. 
+* Run kube-bench for the second time on node1 with the hardened profile. You should see more findings as hardened makes additional checks. Take a screenshot of the results saving as `docs/kube_rke_hardened_scan.png`
+* Using the Rancher RKE kubernetes baseline hardening PDF from the `docs/` folder, and your threat model as per `docs/security_threat_model.txt` review the findings and apply at least three hardening step and rescan node1 for the identified attack surface areas. Focus on the high impact areas, dont just go through the first three recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the kube-bench run. Document each of three findings you hardened in `docs/security_threat_model_kube_rke.txt`
+* Apply changes to the cluster to harden the three weaknesses you threat modeled. You may need to reference the [CIS 1.6 Benchmark - Self-Assessment Guide - Rancher v2.5.4 guide](https://rancher.com/docs/rancher/v2.x/en/security/rancher-2.5/1.6-benchmark-2.5/) as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
+* Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_rke_hardened_done.png`.
 
 **Section 3- Harden and Deploy the Flask App**
 * Configure and run [grype](https://github.com/anchore/grype) to identify software composition vulnerabilities, remediate and deploy the provided Flask app. 
-* The application has intentional security flaws that you need to identify and remediate using your knowledge and grype. There are five vulnerabilities, you will need to find and remediate at least three to get full points for this portion of the project, extra points for more than three.
-* Run a scan manually for the first time, take a screenshot of Grype findings`tools/grype/grype_app_out_of_box.png`.
-* Identify the vulnerable files and remediate the code flaws.
-* Re-run Grype until the bugs are remediated. Once remediated, take a screenshot of `tools/grype/grype_app_hardened.png`.
-* With the Flask app hardened, deploy the app using the provided deployment script in the /scripts folder.
+* The application has intentional security flaws that you need to identify and remediate using your knowledge, trivy and grype. There are more than five vulnerabilities in the image, you will need to find and remediate at least three to get full points for this portion of the project, extra points for more than three.
+* Run a scan manually for the first time, take a screenshot of Trivy and Grype findings `tools/grype/grype_app_out_of_box.png` and `tools/trivy/trivy_app_out_of_box.png`.
+* Inspect the application to identify the vulnerable files and remediate the code flaws. There are more than five vulnerabilities in the image, you will need to find and remediate at least two to get full points for this portion of the project, extra points for more than two.
+* Re-run Trivy and Grype until the bugs are remediated. Once remediated, take a screenshot of `tools/grype/grype_app_hardened.png` and `tools/trivy/trivy_app_hardened.png`.
+* With the Flask app hardened, redeploy the container to redeloy the app. 
 
 **Section 4- Implement Grafana and Falco for run-time monitoring**
 * Deploy a Grafana cluster and panels using the provided instructions 
