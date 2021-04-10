@@ -1,4 +1,4 @@
-# set up the default terminal
+# mainatiner: nick.reva@snap.com
 ENV["TERM"]="linux"
 
 Vagrant.configure("2") do |config|
