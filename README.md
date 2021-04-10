@@ -18,7 +18,7 @@ No stress, you have tools and security incident response knowledge to respond ;)
 
 * Docker Desktop ≥18.09
 * Python ≥3.0
-* K3S ≥v1.20.2
+* RKE ≥v1.26
 * Vagrant ≥2.2.14
 * Virtual Box ≥6.1
 * Grafana ≥7.3
@@ -47,26 +47,25 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Commit the hardend docker image to your private docker hub registry you created during the exercise portion. Next you will deploy the docker container to kubernetes.
 
 ###### 2b- Deploy the docker container to a hardened kubernetes cluster
-* Create a Kubernetes cluster using the hardened docker container image from the registry. Use [kube bench](https://github.com/aquasecurity/kube-bench) to harden the Kubernetes container run-time
-* Create a K3S cluster using the hardened container. Install all dependencies. Reminder: kube-bench needs to be built and installed from source as per the exercise.
-* Run kube-bench for the first time with the base profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
-* Using the kubernetes baseline hardening PDF and YAML from the starter files, review the findings and apply at least one hardening step per the 5 kube-bench-[primitive].yaml files for the identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
+* Create a Kubernetes cluster using the hardened docker container image from the registry. Use the provided Rancher security scan container to harden the cluster.
+* Create a RKE cluster using the hardened container. Install all dependencies. 
+* Run kube-bench for the first time with the hardened profile. Take a screenshot of the results saving as `docs/suse_docker_image_out_of_box.png`.
+* Using the Rancher RKE kubernetes baseline hardening PDF and YAML from the starter files, review the findings and apply at least one hardening step per the provided CIS files with the Rancher security scan container yaml files for the identified attack surface areas. Focus on the high impact areas, dont just go through the first five recommendations. Make sure to explain the reasoning using STRIDE methodology you learned in the exercises and evidenced by the docker-bench run. Document each finding you hardened in `docs/security_threat_model_kube_cluster.txt`
 apply changes to the cluster to harden the five weaknesses you threat modeled. You may need to reference the kubernetes documentation as needed. If you get stuck and can’t figure out how to make the change either pick a different attack surface weakness to harden, try to get help, or document in your submission, this should be exceptional not the rule.
 * Re-run kube-bench to verify that the five weaknesses have been addressed, taking a screenshot of the file for your submission, saving as`docs/kube_cluster_hardened.png`.
 
-**Section 3- Harden and Deploy the Flask App** [maybe remove for scope reduction]
-* Configure and run [grype-vscode](https://github.com/anchore/grype-vscode) in Visual Studio Code to identify software composition vulnerabilities, remediate and deploy the provided Flask app. 
+**Section 3- Harden and Deploy the Flask App**
+* Configure and run [grype](https://github.com/anchore/grype) to identify software composition vulnerabilities, remediate and deploy the provided Flask app. 
 * The application has intentional security flaws that you need to identify and remediate using your knowledge and grype. There are five vulnerabilities, you will need to find and remediate at least three to get full points for this portion of the project, extra points for more than three.
-* Run a scan manually for the first time, take a screenshot of Grype findings in Visual Studio Code  `tools/grype/grype_app_out_of_box.png`.
-* Identify the vulnerable files and remediate the code flaws. If you get stuck on how to remediate, reference the exercise on OWASP-10 vulnerability classes.
+* Run a scan manually for the first time, take a screenshot of Grype findings`tools/grype/grype_app_out_of_box.png`.
+* Identify the vulnerable files and remediate the code flaws.
 * Re-run Grype until the bugs are remediated. Once remediated, take a screenshot of `tools/grype/grype_app_hardened.png`.
 * With the Flask app hardened, deploy the app using the provided deployment script in the /scripts folder.
 
 **Section 4- Implement Grafana and Falco for run-time monitoring**
-* Deploy a Grafana cluster and panels using the provided instructions
-* Following instructions from Course 4, [Starting with Dashboards](https://classroom.udacity.com/nanodegrees/nd064-beta/parts/49b578d8-9829-425d-a25f-8d15663d4506/modules/19323279-ee64-4704-8346-8109d7ba54a0/lessons/6ced7264-046e-4dfd-93c7-951eb565293f/concepts/cb022950-9920-40fb-bf9e-3c014306163b) to deploy a Grafana cluster.
-* Following instructions from Course 4, [Panels](https://classroom.udacity.com/nanodegrees/nd064-beta/parts/49b578d8-9829-425d-a25f-8d15663d4506/modules/19323279-ee64-4704-8346-8109d7ba54a0/lessons/6ced7264-046e-4dfd-93c7-951eb565293f/concepts/6b252e12-d3ed-45ce-8e01-cc179112bb5a) to configure a Grafana panel.
-* Using [falco](https://github.com/falcosecurity/falco), implement run-time security monitoring via sysdig falco with kubernetes audit rules and configure logging to Grafana.
+* Deploy a Grafana cluster and panels using the provided instructions 
+* Following instructions from exercies in lesson 6, deploy grafana to your RKE cluster.
+* Following instructions from exercies in lesson 6, implement run-time security monitoring via sysdig falco with kubernetes audit rules and configure logging to Grafana.
 * Install falco and all dependencies to the cluser. Reminder: Ensure to trust the falcosecurity GPG key and install kernel headers.
 * Investigate the default falco rules file located at /etc/falco/falco_rules.yaml. It contains a predefined set of rules designed to provide good coverage in a variety of situations. 
 * Vim the falco rules file and pick five rules to evaluate. Using STRIDE, assess which threats the rules may identify, save this as `docs/security_threat_model_falco_rules.txt`.
