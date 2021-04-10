@@ -1,3 +1,4 @@
+# mainatiner: nick.reva@snap.com
 apiVersion: v1
 kind: Config
 clusters:
