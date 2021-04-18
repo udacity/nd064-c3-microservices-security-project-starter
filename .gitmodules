@@ -3,4 +3,4 @@
 	url = https://github.com/aquasecurity/docker-bench
 [submodule "vuln_app"]
 	path = vuln_app
-	url = https://github.com/anxolerd/dvpwa.git
+	url = https://github.com/anxolerd/dvpwa
