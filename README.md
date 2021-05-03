@@ -64,7 +64,7 @@ No stress, you have tools and security incident response knowledge to respond ;)
 * Re-run Trivy and Grype until the bugs are remediated. Once remediated, take a screenshot of `tools/grype/grype_app_hardened.png` and `tools/trivy/trivy_app_hardened.png`.
 * With the Flask app hardened, redeploy the container to redeloy the app. 
 
-**Section 4- Implement Grafana and Falco for run-time monitoring**
+**Section 4- Implement Falco for run-time monitoring and Grafana**
 * Deploy a Grafana cluster and panels using the provided instructions 
 * Following instructions from exercies in lesson 6, deploy grafana to your RKE cluster.
 * Following instructions from exercies in lesson 6, implement run-time security monitoring via sysdig falco with kubernetes audit rules and configure logging to Grafana.
