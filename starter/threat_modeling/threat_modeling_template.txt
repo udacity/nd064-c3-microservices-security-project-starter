@@ -1,7 +1,5 @@
 Docker Threat Modeling
-Given Docker's system components and the STRIDE framework, identify 5 potential threats that may arise.
+Given Docker's system components and the STRIDE framework, identify five potential threats that may arise.
 
 Kubernetes Threat Modeling
-Given Kubernetes' system components and the STRIDE framework, identify 5 potential threats that may arise.
-
-
+Given Kubernetes' system components and the STRIDE framework, identify five potential threats that may arise.
