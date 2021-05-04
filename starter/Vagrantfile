@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   config.ssh.password = 'vagrant'
   config.ssh.insert_key = 'true'
 
-  NodeCount = 2
+  NodeCount = 1
 
   # configure Kubernetes Nodes
   (1..NodeCount).each do |i|
