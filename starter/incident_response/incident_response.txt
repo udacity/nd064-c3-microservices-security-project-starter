@@ -1,5 +1,5 @@
 1. Incident commander name:
-2. Summary of what happened:
+2. Executive Summary of what happened:
 3. Summary of what was affected:
 4. Summmry of the impact:
 5. Summary of the remediation steps:
