@@ -4,6 +4,6 @@ kubectl run --kubeconfig kube_config_cluster.yml moneropool --image=servethehome
 #start minergate
 kubectl run --kubeconfig kube_config_cluster.yml minergate --image=servethehome/monero_cpu_minergate:latest --replicas=1
 #start cryptotonight
-kubectl run --kubeconfig kube_config_cluster.yml minergate --image=servethehome/universal_cryptonight:latest --replicas=1
+kubectl run --kubeconfig kube_config_cluster.yml cryptotonight --image=servethehome/universal_cryptonight:latest --replicas=1
 
 echo "Can you identify the payload(s)?"
