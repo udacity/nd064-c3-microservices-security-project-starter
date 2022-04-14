@@ -4,17 +4,17 @@
 FROM opensuse/leap:latest
 
 #define maintainer 
-LABEL maintainer="nick.reva@snap.com"
+LABEL maintainer="jdubya747@gmail.com"
 
 #define version
 LABEL version="V1"
 
 # create a directory to work in
-RUN mkdir udacity \
+RUN mkdir -p udacity \
     && cd udacity
 
 #install zypper 
-RUN zypper refs && zypper refresh
-
+#RUN zypper refs && zypper refresh
+RUN zypper ref && zypper up -y
 #add local user
 USER $SEC_USER

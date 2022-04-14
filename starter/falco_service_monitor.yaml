@@ -1,0 +1,32 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    meta.helm.sh/release-name: falco-exporter
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2022-03-04T22:55:31Z"
+  generation: 1
+  labels:
+    "0": kube-prometheus-stack
+    release: prometheus
+    app.kubernetes.io/instance: falco-exporter
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: falco-exporter
+    app.kubernetes.io/version: 0.7.0
+    helm.sh/chart: falco-exporter-0.8.0
+  name: falco-exporter
+  namespace: default
+  resourceVersion: "151908"
+  uid: 26b42669-d400-4dba-a23a-f3848f90ae73
+spec:
+  endpoints:
+  - port: metrics
+    interval: 5s
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: falco-exporter
+      app.kubernetes.io/name: falco-exporter
