@@ -21,3 +21,4 @@ starter/.vagrant/machines/node1/virtualbox/index_uuid
 starter/.vagrant/machines/node1/virtualbox/private_key
 starter/.vagrant/machines/node1/virtualbox/synced_folders
 starter/.vagrant/machines/node1/virtualbox/vagrant_cwd
+starter/docker-bench
