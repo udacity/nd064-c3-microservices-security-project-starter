@@ -1,8 +1,8 @@
-# mainatiner: nick.reva@snap.com
+# author: nick.reva@snap.com
+# created April 11, 2021
 ENV["TERM"]="linux"
 
 Vagrant.configure("2") do |config|
-#test for Yi!
   # set up root access
   config.ssh.username = 'root'
   config.ssh.password = 'vagrant'
@@ -14,10 +14,10 @@ Vagrant.configure("2") do |config|
   (1..NodeCount).each do |i|
     config.vm.define "node#{i}" do |node|
       # set base image for the vagrant box
-      config.vm.box = "opensuse/Leap-15.2.x86_64"
+      config.vm.box = "opensuse/Leap-15.4.x86_64"
 
       # set the static IP for the vagrant box
-      node.vm.network "private_network", ip: "192.168.50.10#{i}"
+      node.vm.network "private_network", ip: "192.168.50.101"
       # configure the parameters for VirtualBox provider
       node.vm.provider "virtualbox" do |v|
         v.name = "node#{i}"
