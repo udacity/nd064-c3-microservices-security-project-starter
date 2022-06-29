@@ -3,4 +3,5 @@
 *.pyc
 __pycache__/
 **/.vagrant
-**/.DS_Store
+**/.DS_Sto
+cluster.rkestate

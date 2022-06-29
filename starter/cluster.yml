@@ -1,4 +1,5 @@
-# mainatiner: nick.reva@snap.com
+# author: nick.reva@snap.com
+# created April 11, 2021
 nodes:
 - address: 192.168.50.101
   port: "22"
