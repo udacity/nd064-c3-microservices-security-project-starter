@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    release: kube-prometheus-stack-1670613497 # CHANGE THIS VALUE
+  name: falco-exporter-servicemonitor
+  namespace: falco
+spec:
+  endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    - port: metrics
+    - interval: 5s
+  namespaceSelector:
+    matchNames:
+      - falco
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: falco-exporter
+      app.kubernetes.io/name: falco-exporter
