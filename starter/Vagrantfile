@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
       # configure the parameters for VirtualBox provider
       node.vm.provider "virtualbox" do |v|
         v.name = "node#{i}"
-        v.memory = 8192
+        v.memory = 4096
         v.cpus = 2
       end
 
