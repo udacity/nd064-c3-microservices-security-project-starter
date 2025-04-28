@@ -1,0 +1,106 @@
+#!/bin/bash
+
+set -e
+START_FROM="${1:-all}"   # Default to 'all' if no argument
+RUN=false
+
+USER_HOST="udacity"
+PASS_HOST="UdacityRocks.1!!"
+USER_VAGRANT="root"
+PASS_VAGRANT="vagrant"
+IP_VAGRANT="192.168.50.101"
+
+
+run() {
+    local section="$1"
+    shift
+    if [[ "$START_FROM" == "all" || "$RUN" == true || "$START_FROM" == "$section" ]]; then
+        RUN=true
+        echo "=== Running section: $section ==="
+        "$@"
+    fi
+}
+
+
+do_100() {
+    echo "Init Docker"
+    sudo systemctl start docker
+    sudo chmod 666 /var/run/docker.sock
+    sudo groupadd docker
+    sudo usermod -aG docker root
+
+    echo "Clone the project and init .ssh/known_hosts"
+    git clone --recurse-submodules https://github.com/varsanyim/nd064-c3-microservices-security-project-starter.git
+    cd nd064-c3-microservices-security-project-starter/starter
+    git pull
+
+    mv ~/.ssh/known_hosts ~/.ssh/known_hosts
+
+    rke --version
+}
+
+do_200() {
+    rm nohup.log
+    nohup bash -c '( 
+        vagrant up > vagrant_up.log 2>&1 && 
+        echo "Host credentials: $USER_HOST : $PASS_HOST"; 
+        echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
+        echo "Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine'\''s admin password, [$PASS_HOST] . The second password is the Node'\''s password, [$PASS_VAGRANT]."; 
+        ssh-copy-id -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT &&
+        rke up --ignore-docker-version --config cluster.yml &&
+        # while [ "$(kubectl --kubeconfig kube_config_cluster.yml get nodes | tail -n +2 | wc -l)" -lt 2 ]; do rke up --ignore-docker-version; sleep 10; done
+
+    )' > nohup.log 2>&1 &
+    export NOHUP_PID=$!
+    echo "Vagrant and RKE setup is starting with PID $NOHUP_PID"
+}
+
+do_300() {
+    # sudo zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/go/15.4/devel:languages:go.repo
+    sudo zypper --non-interactive refresh
+    # sudo zypper install go1.19
+    sudo zypper --non-interactive in go go-doc
+    go version
+    go env | grep GOENV
+
+    sudo curl -SL https://github.com/docker/compose/releases/download/v2.12.2/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+    cd /usr/local/bin/
+    sudo chmod +x docker-compose
+
+    python3 -m pip install icdiff
+
+    sudo zypper --non-interactive in sqlite3
+    sqlite3 --version
+
+    sudo curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
+    syft --version
+
+    curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
+    grype version
+
+    curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.18.3
+    trivy --version
+}
+
+do_400() {
+    echo "Waiting for Vagrant to finish..."
+    wait $NOHUP_PID
+    echo "Vagrant is now up! Check the logs and Continuing with setup..."
+    touch nohup.log
+    less nohup.log
+}
+
+do_500() {
+    kubectl --kubeconfig kube_config_cluster.yml get nodes
+    kubectl --kubeconfig kube_config_cluster.yml get pods -A
+
+}
+
+
+#workflow
+run do_100 do_100
+run do_200 do_200
+run do_300 do_300
+run do_400 do_400
+run do_500 do_500
+
