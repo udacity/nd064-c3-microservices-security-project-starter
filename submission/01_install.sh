@@ -123,6 +123,9 @@ do_400() {
     echo "Use password: $PASS_HOST for Host"
     echo "Use password: $PASS_VAGRANT for Vagrant"
     ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
+    sleep 10
+    echo "SSH key copied to Vagrant.\n\n"
+
     rke up --ignore-docker-version --config cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
     kubectl --kubeconfig kube_config_cluster.yml get nodes
