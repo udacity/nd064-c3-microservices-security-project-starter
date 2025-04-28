@@ -4,6 +4,7 @@ set -e
 START_FROM="${1:-all}"   # Default to 'all' if no argument
 RUN=false
 
+export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
 USER_HOST="udacity"
 PASS_HOST="UdacityRocks.1!!"
 USER_VAGRANT="root"
@@ -28,10 +29,11 @@ do_100() {
     sudo chmod 666 /var/run/docker.sock
     sudo groupadd docker
     sudo usermod -aG docker root
+    docker login -u varsanyim 
 
     echo "Clone the project and init .ssh/known_hosts"
     git clone --recurse-submodules https://github.com/varsanyim/nd064-c3-microservices-security-project-starter.git
-    cd nd064-c3-microservices-security-project-starter/starter
+    cd $PROJECT_DIR
     git pull
 
     mv ~/.ssh/known_hosts ~/.ssh/known_hosts
@@ -80,6 +82,15 @@ do_300() {
 
     curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.18.3
     trivy --version
+
+    echo "Clone & install docker-bench"
+    cd ~
+    git clone https://github.com/aquasecurity/docker-bench.git
+    cd docker-bench/
+    go build -o docker-bench
+    ./docker-bench --include-test-output > docker-bench.txt    
+    cd $PROJECT_DIR
+    echo "Kube-bench is installed after RKE is up"
 }
 
 do_400() {
@@ -93,7 +104,13 @@ do_400() {
 do_500() {
     kubectl --kubeconfig kube_config_cluster.yml get nodes
     kubectl --kubeconfig kube_config_cluster.yml get pods -A
+    docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
+    docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
+    docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
 
+    echo "Clone & install kube-bench"
+    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
+    kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
 }
 
 
