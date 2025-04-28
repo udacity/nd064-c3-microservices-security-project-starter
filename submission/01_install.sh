@@ -9,11 +9,11 @@ RUN=false
 
 export SUBMISSION=~/nd064-c3-microservices-security-project-starter/submission
 export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
-USER_HOST="udacity"
-PASS_HOST="UdacityRocks.1!!"
-USER_VAGRANT="root"
-PASS_VAGRANT="vagrant"
-IP_VAGRANT="192.168.50.101"
+export USER_HOST="udacity"
+export PASS_HOST="UdacityRocks.1!!"
+export USER_VAGRANT="root"
+export PASS_VAGRANT="vagrant"
+export IP_VAGRANT="192.168.50.101"
 
 DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
 
@@ -59,22 +59,21 @@ do_100() {
     fi
 
     rke --version
+
 }
 
 do_200() {
-    rm nohup.log
-    nohup bash -c '( 
+    if [ -f nohup.log ]; then 
+        rm nohup.log
+    fi
+    nohup bash -c '
         vagrant up > vagrant_up.log 2>&1 && 
         echo "Host credentials: $USER_HOST : $PASS_HOST"; 
         echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
         echo "Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine'\''s admin password, [$PASS_HOST] . The second password is the Node'\''s password, [$PASS_VAGRANT]."; 
-        ssh-copy-id -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT &&
-        rke up --ignore-docker-version --config cluster.yml &&
-        # while [ "$(kubectl --kubeconfig kube_config_cluster.yml get nodes | tail -n +2 | wc -l)" -lt 2 ]; do rke up --ignore-docker-version; sleep 10; done
-
-    )' > nohup.log 2>&1 &
+    ' > nohup.log 2>&1 &
     export NOHUP_PID=$!
-    echo "Vagrant and RKE setup is starting with PID $NOHUP_PID"
+    echo "Vagrant setup is starting with PID $NOHUP_PID"
 }
 
 do_300() {
@@ -115,14 +114,17 @@ do_300() {
 }
 
 do_400() {
-    echo "Waiting for Vagrant to finish..."
-    wait $NOHUP_PID
+    echo "Waiting for Vagrant to finish... ${NOHUP_PID}"
+    while ps -p $NOHUP_PID > /dev/null; do
+        sleep 30
+        echo "Vagrant up is still running..."
+    done
     echo "Vagrant is now up! Check the logs and Continuing with setup..."
-    touch nohup.log
-    less nohup.log
-}
-
-do_500() {
+    echo "Use password: $PASS_HOST for Host"
+    echo "Use password: $PASS_VAGRANT for Vagrant"
+    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
+    rke up --ignore-docker-version --config cluster.yml
+    echo "RKE is up! Check the logs and Continuing with setup..."
     kubectl --kubeconfig kube_config_cluster.yml get nodes
     kubectl --kubeconfig kube_config_cluster.yml get pods -A
     docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
@@ -136,7 +138,7 @@ do_500() {
 }
 
 # Function to capture version information and configurations
-capture_version_info() {
+do_1000() {
     SUMMARY_FILE="$SUBMISSION/setup_summary.txt"
     echo "=== Capturing version information and configurations ===" >> $SUMMARY_FILE
     echo "Environment setup on $(date)" >> $SUMMARY_FILE
@@ -157,10 +159,11 @@ capture_version_info() {
     cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
 
     echo "Kube-bench configuration:" >> $SUMMARY_FILE
-    cat ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash && \
+    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash && \
     cat /etc/kube-bench/cfg/kube-bench-config.yaml " >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
 
     echo "=============================" >> $SUMMARY_FILE
+    cat $SUMMARY_FILE
 }
 
 #workflow
@@ -168,5 +171,5 @@ run do_100 do_100
 run do_200 do_200
 run do_300 do_300
 run do_400 do_400
-run do_500 do_500
-run capture_version_info capture_version_info 
+run do_1000 do_1000
+echo "=== Environment setup completed ==="
