@@ -38,7 +38,7 @@ do_100() {
     fi
     sudo usermod -aG docker root
     echo "Login to Docker Hub"
-    docker login -u varsanyim 
+    docker login
 
     echo "Clone the project and init .ssh/known_hosts"
     if [ ! -d "$PROJECT_DIR" ]; then
