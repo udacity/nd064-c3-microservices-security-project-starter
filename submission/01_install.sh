@@ -33,21 +33,30 @@ do_100() {
     echo "Init Docker"
     sudo systemctl start docker
     sudo chmod 666 /var/run/docker.sock
-    sudo groupadd docker
+    if ! getent group docker > /dev/null; then
+        sudo groupadd docker
+    fi
     sudo usermod -aG docker root
+    echo "Login to Docker Hub"
     docker login -u varsanyim 
 
     echo "Clone the project and init .ssh/known_hosts"
-    git clone --recurse-submodules https://github.com/varsanyim/nd064-c3-microservices-security-project-starter.git
+    if [ ! -d "$PROJECT_DIR" ]; then
+        cd ~
+        git clone --recurse-submodules https://github.com/varsanyim/nd064-c3-microservices-security-project-starter.git
+    fi
     cd $PROJECT_DIR
-    git submodule update --init --recursive # might not be needed
     git pull
-    mkdir -p $SUBMISSION
-    git add .
-    git commit -m "submission directory added"
-    git push
+    if [ ! -d "$SUBMISSION" ]; then
+        mkdir -p $SUBMISSION
+        git add .
+        git commit -m "submission directory added"
+        git push
+    fi
 
-    mv ~/.ssh/known_hosts ~/.ssh/known_hosts
+    if [ -f ~/.ssh/known_hosts ]; then
+        mv ~/.ssh/known_hosts ~/.ssh/known_hosts.$(date +%Y%m%d_%H%M%S)
+    fi
 
     rke --version
 }
@@ -95,12 +104,13 @@ do_300() {
     trivy --version
 
     echo "Clone & install docker-bench"
-    cd ~
-    git clone https://github.com/aquasecurity/docker-bench.git
-    cd docker-bench/
-    go build -o docker-bench
-    ./docker-bench --include-test-output > docker-bench.txt    
-    cd $PROJECT_DIR
+    if [ ! -d ~/docker-bench ]; then
+        cd ~
+        git clone https://github.com/aquasecurity/docker-bench.git
+        cd docker-bench/
+        go build -o docker-bench
+        cd $PROJECT_DIR
+    fi
     echo "Kube-bench is installed after RKE is up"
 }
 
