@@ -63,17 +63,31 @@ do_100() {
 }
 
 do_200() {
-    if [ -f nohup.log ]; then 
-        rm nohup.log
-    fi
-    nohup bash -c '
-        vagrant up > vagrant_up.log 2>&1 && 
-        echo "Host credentials: $USER_HOST : $PASS_HOST"; 
-        echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
-        echo "Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine'\''s admin password, [$PASS_HOST] . The second password is the Node'\''s password, [$PASS_VAGRANT]."; 
-    ' > nohup.log 2>&1 &
-    export NOHUP_PID=$!
-    echo "Vagrant setup is starting with PID $NOHUP_PID"
+    vagrant up > vagrant_up.log 2>&1 
+
+    echo "\n\n\nHost credentials: $USER_HOST : $PASS_HOST"; 
+    echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
+
+    echo "Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine'\''s admin password, [$PASS_HOST] . The second password is the Node'\''s password, [$PASS_VAGRANT]."; 
+
+    echo "Use password: $PASS_HOST for Host"
+    echo "Use password: $PASS_VAGRANT for Vagrant"
+    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
+    sleep 10
+    echo "SSH key copied to Vagrant.\n\n"
+
+    rke up --ignore-docker-version --config cluster.yml
+    echo "RKE is up! Check the logs and Continuing with setup..."
+    kubectl --kubeconfig kube_config_cluster.yml get nodes
+    kubectl --kubeconfig kube_config_cluster.yml get pods -A
+    docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
+    docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
+    docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
+
+    # echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
+    # ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
+    # kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
+
 }
 
 do_300() {
@@ -113,33 +127,6 @@ do_300() {
     echo "Kube-bench is installed after RKE is up"
 }
 
-do_400() {
-    echo "Waiting for Vagrant to finish... ${NOHUP_PID}"
-    while ps -p $NOHUP_PID > /dev/null; do
-        sleep 30
-        echo "Vagrant up is still running..."
-    done
-    echo "Vagrant is now up! Check the logs and Continuing with setup..."
-    echo "Use password: $PASS_HOST for Host"
-    echo "Use password: $PASS_VAGRANT for Vagrant"
-    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
-    sleep 10
-    echo "SSH key copied to Vagrant.\n\n"
-
-    rke up --ignore-docker-version --config cluster.yml
-    echo "RKE is up! Check the logs and Continuing with setup..."
-    kubectl --kubeconfig kube_config_cluster.yml get nodes
-    kubectl --kubeconfig kube_config_cluster.yml get pods -A
-    docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
-    docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
-    docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
-
-    # echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
-    # ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
-    # kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
-
-}
-
 # Function to capture version information and configurations
 do_1000() {
     SUMMARY_FILE="$SUBMISSION/setup_summary.txt"
@@ -173,6 +160,5 @@ do_1000() {
 run do_100 do_100
 run do_200 do_200
 run do_300 do_300
-run do_400 do_400
 run do_1000 do_1000
 echo "=== Environment setup completed ==="
