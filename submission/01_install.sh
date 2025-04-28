@@ -1,15 +1,21 @@
 #!/bin/bash
 
+# This script is designed to initalize an environment for running security tests on a microservices project.
+# It sets up Docker, Vagrant, and various security tools, and runs commands to prepare the environment.
+
 set -e
 START_FROM="${1:-all}"   # Default to 'all' if no argument
 RUN=false
 
+export SUBMISSION=~/nd064-c3-microservices-security-project-starter/submission
 export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
 USER_HOST="udacity"
 PASS_HOST="UdacityRocks.1!!"
 USER_VAGRANT="root"
 PASS_VAGRANT="vagrant"
 IP_VAGRANT="192.168.50.101"
+
+DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
 
 
 run() {
@@ -34,7 +40,12 @@ do_100() {
     echo "Clone the project and init .ssh/known_hosts"
     git clone --recurse-submodules https://github.com/varsanyim/nd064-c3-microservices-security-project-starter.git
     cd $PROJECT_DIR
+    git submodule update --init --recursive # might not be needed
     git pull
+    mkdir -p $SUBMISSION
+    git add .
+    git commit -m "submission directory added"
+    git push
 
     mv ~/.ssh/known_hosts ~/.ssh/known_hosts
 
@@ -108,11 +119,39 @@ do_500() {
     docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
     docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
 
-    echo "Clone & install kube-bench"
-    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
-    kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
+    # echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
+    # ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
+    # kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
+
 }
 
+# Function to capture version information and configurations
+capture_version_info() {
+    SUMMARY_FILE="$SUBMISSION/setup_summary.txt"
+    echo "=== Capturing version information and configurations ===" >> $SUMMARY_FILE
+    echo "Environment setup on $(date)" >> $SUMMARY_FILE
+    echo "=============================" >> $SUMMARY_FILE
+
+    echo "Docker version: $(docker --version)" >> $SUMMARY_FILE
+    echo "Docker Compose version: $(docker-compose --version)" >> $SUMMARY_FILE
+    echo "Go version: $(go version)" >> $SUMMARY_FILE
+    echo "Syft version: $(syft --version)" >> $SUMMARY_FILE
+    echo "Grype version: $(grype version)" >> $SUMMARY_FILE
+    echo "Trivy version: $(trivy --version)" >> $SUMMARY_FILE
+    echo "SQLite3 version: $(sqlite3 --version)" >> $SUMMARY_FILE
+    echo "RKE version: $(rke --version)" >> $SUMMARY_FILE
+    echo "Kube-bench version: $(kube-bench --version)" >> $SUMMARY_FILE
+    echo "=============================" >> $SUMMARY_FILE
+
+    echo "Docker configuration:" >> $SUMMARY_FILE
+    cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
+
+    echo "Kube-bench configuration:" >> $SUMMARY_FILE
+    cat ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash && \
+    cat /etc/kube-bench/cfg/kube-bench-config.yaml " >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
+
+    echo "=============================" >> $SUMMARY_FILE
+}
 
 #workflow
 run do_100 do_100
@@ -120,4 +159,4 @@ run do_200 do_200
 run do_300 do_300
 run do_400 do_400
 run do_500 do_500
-
+run capture_version_info capture_version_info 
