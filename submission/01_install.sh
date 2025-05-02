@@ -107,7 +107,7 @@ do_200() {
           kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened
           kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-permissive
           "
-
+    read -p "Press enter to continue"
 }
 
 do_300() {

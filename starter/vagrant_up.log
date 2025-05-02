@@ -1,4 +1,180 @@
+==> vagrant: A new version of Vagrant is available: 2.4.5 (installed version: 2.3.2)!
+==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
+
 Bringing machine 'node1' up with 'virtualbox' provider...
+==> node1: Importing base box 'opensuse/Leap-15.4.x86_64'...
+[KProgress: 10%[KProgress: 40%[KProgress: 50%[KProgress: 60%[KProgress: 70%[KProgress: 80%[KProgress: 90%[K==> node1: Generating MAC address for NAT networking...
 ==> node1: Checking if box 'opensuse/Leap-15.4.x86_64' version '15.4.13.7' is up to date...
-==> node1: Machine already provisioned. Run `vagrant provision` or use the `--provision`
-==> node1: flag to force provisioning. Provisioners marked to run always will still run.
+==> node1: Setting the name of the VM: node1
+==> node1: Clearing any previously set network interfaces...
+==> node1: Preparing network interfaces based on configuration...
+    node1: Adapter 1: nat
+    node1: Adapter 3: bridged
+    node1: Adapter 2: hostonly
+==> node1: Forwarding ports...
+    node1: 8080 (guest) => 8080 (host) (adapter 1)
+    node1: 9090 (guest) => 9090 (host) (adapter 1)
+    node1: 9100 (guest) => 9100 (host) (adapter 1)
+    node1: 9376 (guest) => 9376 (host) (adapter 1)
+    node1: 3000 (guest) => 3000 (host) (adapter 1)
+    node1: 22 (guest) => 2222 (host) (adapter 1)
+==> node1: Running 'pre-boot' VM customizations...
+==> node1: Booting VM...
+==> node1: Waiting for machine to boot. This may take a few minutes...
+    node1: SSH address: 127.0.0.1:2222
+    node1: SSH username: root
+    node1: SSH auth method: password
+    node1: Warning: Connection reset. Retrying...
+    node1: Warning: Remote connection disconnect. Retrying...
+    node1: 
+    node1: Inserting generated public key within guest...
+    node1: Removing insecure key from the guest if it's present...
+    node1: Key inserted! Disconnecting and reconnecting using new SSH key...
+==> node1: Machine booted and ready!
+[node1] GuestAdditions 6.1.38 running --- OK.
+==> node1: Checking for guest additions in VM...
+==> node1: Configuring and enabling network interfaces...
+==> node1: Mounting shared folders...
+    node1: /vagrant => /home/udacity/nd064-c3-microservices-security-project-starter/starter
+==> node1: Running provisioner: shell...
+    node1: Running: inline script
+    node1: Retrieving repository 'Update repository of openSUSE Backports' metadata [..done]
+    node1: Building repository 'Update repository of openSUSE Backports' cache [....done]
+    node1: Retrieving repository 'Non-OSS Repository' metadata [.
+    node1: Warning: The gpg key signing file 'repomd.xml' has expired.
+    node1:   Repository:       Non-OSS Repository
+    node1:   Key Fingerprint:  22C0 7BA5 3417 8CD0 2EFE 22AA B88B 2FD4 3DBD C284
+    node1:   Key Name:         openSUSE Project Signing Key <opensuse@opensuse.org>
+    node1:   Key Algorithm:    RSA 2048
+    node1:   Key Created:      Mon May  5 08:37:40 2014
+    node1:   Key Expires:      Thu May  2 08:37:40 2024 (EXPIRED)
+    node1:   Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
+    node1: done]
+    node1: Building repository 'Non-OSS Repository' cache [....done]
+    node1: Retrieving repository 'Main Repository' metadata [.
+    node1: Warning: The gpg key signing file 'repomd.xml' has expired.
+    node1:   Repository:       Main Repository
+    node1:   Key Fingerprint:  22C0 7BA5 3417 8CD0 2EFE 22AA B88B 2FD4 3DBD C284
+    node1:   Key Name:         openSUSE Project Signing Key <opensuse@opensuse.org>
+    node1:   Key Algorithm:    RSA 2048
+    node1:   Key Created:      Mon May  5 08:37:40 2014
+    node1:   Key Expires:      Thu May  2 08:37:40 2024 (EXPIRED)
+    node1:   Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
+    node1: ....done]
+    node1: Building repository 'Main Repository' cache [....done]
+    node1: Retrieving repository 'Update repository with updates from SUSE Linux Enterprise 15' metadata [.
+    node1: Warning: The gpg key signing file 'repomd.xml' has expired.
+    node1:   Repository:       Update repository with updates from SUSE Linux Enterprise 15
+    node1:   Key Fingerprint:  FEAB 5025 39D8 46DB 2C09 61CA 70AF 9E81 39DB 7C82
+    node1:   Key Name:         SuSE Package Signing Key <build@suse.de>
+    node1:   Key Algorithm:    RSA 2048
+    node1:   Key Created:      Mon Sep 21 08:21:47 2020
+    node1:   Key Expires:      Fri Sep 20 08:21:47 2024 (EXPIRED)
+    node1:   Rpm Name:         gpg-pubkey-39db7c82-5f68629b
+    node1: ........done]
+    node1: Building repository 'Update repository with updates from SUSE Linux Enterprise 15' cache [....done]
+    node1: Retrieving repository 'Main Update Repository' metadata [.
+    node1: Warning: The gpg key signing file 'repomd.xml' has expired.
+    node1:   Repository:       Main Update Repository
+    node1:   Key Fingerprint:  22C0 7BA5 3417 8CD0 2EFE 22AA B88B 2FD4 3DBD C284
+    node1:   Key Name:         openSUSE Project Signing Key <opensuse@opensuse.org>
+    node1:   Key Algorithm:    RSA 2048
+    node1:   Key Created:      Mon May  5 08:37:40 2014
+    node1:   Key Expires:      Thu May  2 08:37:40 2024 (EXPIRED)
+    node1:   Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
+    node1: done]
+    node1: Building repository 'Main Update Repository' cache [....done]
+    node1: Retrieving repository 'Update Repository (Non-Oss)' metadata [.
+    node1: Warning: The gpg key signing file 'repomd.xml' has expired.
+    node1:   Repository:       Update Repository (Non-Oss)
+    node1:   Key Fingerprint:  22C0 7BA5 3417 8CD0 2EFE 22AA B88B 2FD4 3DBD C284
+    node1:   Key Name:         openSUSE Project Signing Key <opensuse@opensuse.org>
+    node1:   Key Algorithm:    RSA 2048
+    node1:   Key Created:      Mon May  5 08:37:40 2014
+    node1:   Key Expires:      Thu May  2 08:37:40 2024 (EXPIRED)
+    node1:   Rpm Name:         gpg-pubkey-3dbdc284-53674dd4
+    node1: done]
+    node1: Building repository 'Update Repository (Non-Oss)' cache [....done]
+    node1: Loading repository data...
+    node1: Warning: Repository 'Update repository of openSUSE Backports' appears to be outdated. Consider using a different mirror or server.
+    node1: Warning: Repository 'Update Repository (Non-Oss)' appears to be outdated. Consider using a different mirror or server.
+    node1: Reading installed packages...
+    node1: Resolving package dependencies...
+    node1: 
+    node1: The following NEW package is going to be installed:
+    node1:   apparmor-parser
+    node1: 
+    node1: 1 new package to install.
+    node1: Overall download size: 524.8 KiB. Already cached: 0 B. After the operation, additional 1.6 MiB will be used.
+    node1: Continue? [y/n/v/...? shows all options] (y): y
+    node1: Retrieving package apparmor-parser-3.0.4-150400.5.9.1.x86_64 (1/1), 524.8 KiB (  1.6 MiB unpacked)
+    node1: Retrieving: apparmor-parser-3.0.4-150400.5.9.1.x86_64.rpm [done]
+    node1: 
+    node1: Checking for file conflicts: [......done]
+    node1: (1/1) Installing: apparmor-parser-3.0.4-150400.5.9.1.x86_64 [............
+    node1: Created symlink /etc/systemd/system/multi-user.target.wants/apparmor.service -> /usr/lib/systemd/system/apparmor.service.
+    node1: done]
+    node1: Loading repository data...
+    node1: Warning: Repository 'Update repository of openSUSE Backports' appears to be outdated. Consider using a different mirror or server.
+    node1: Warning: Repository 'Update Repository (Non-Oss)' appears to be outdated. Consider using a different mirror or server.
+    node1: Reading installed packages...
+    node1: Resolving package dependencies...
+    node1: 
+    node1: The following 13 NEW packages are going to be installed:
+    node1:   catatonit containerd docker e2fsprogs iptables libext2fs2 libip6tc2 libnetfilter_conntrack3 libnfnetlink0 libnftnl11 runc xtables-plugins xz
+    node1: 
+    node1: 13 new packages to install.
+    node1: Overall download size: 49.7 MiB. Already cached: 0 B. After the operation, additional 199.5 MiB will be used.
+    node1: Continue? [y/n/v/...? shows all options] (y): y
+    node1: Retrieving package libip6tc2-1.8.7-1.1.x86_64 (1/13),  24.4 KiB ( 30.8 KiB unpacked)
+    node1: Retrieving: libip6tc2-1.8.7-1.1.x86_64.rpm [done]
+    node1: Retrieving package libnfnetlink0-1.0.1-2.11.x86_64 (2/13),  27.7 KiB ( 44.9 KiB unpacked)
+    node1: Retrieving: libnfnetlink0-1.0.1-2.11.x86_64.rpm [done]
+    node1: Retrieving package libnftnl11-1.2.0-150400.1.6.x86_64 (3/13),  67.3 KiB (199.9 KiB unpacked)
+    node1: Retrieving: libnftnl11-1.2.0-150400.1.6.x86_64.rpm [done]
+    node1: Retrieving package xz-5.2.3-150000.4.7.1.x86_64 (4/13), 140.8 KiB (319.0 KiB unpacked)
+    node1: Retrieving: xz-5.2.3-150000.4.7.1.x86_64.rpm [.done]
+    node1: Retrieving package libnetfilter_conntrack3-1.0.7-1.38.x86_64 (5/13),  47.7 KiB (126.7 KiB unpacked)
+    node1: Retrieving: libnetfilter_conntrack3-1.0.7-1.38.x86_64.rpm [done]
+    node1: Retrieving package xtables-plugins-1.8.7-1.1.x86_64 (6/13), 243.4 KiB (  1.4 MiB unpacked)
+    node1: Retrieving: xtables-plugins-1.8.7-1.1.x86_64.rpm [done]
+    node1: Retrieving package iptables-1.8.7-1.1.x86_64 (7/13), 210.2 KiB (504.0 KiB unpacked)
+    node1: Retrieving: iptables-1.8.7-1.1.x86_64.rpm [done]
+    node1: Retrieving package catatonit-0.1.7-150300.10.3.1.x86_64 (8/13), 269.5 KiB (790.3 KiB unpacked)
+    node1: Retrieving: catatonit-0.1.7-150300.10.3.1.x86_64.rpm [done]
+    node1: Retrieving package libext2fs2-1.46.4-150400.3.3.1.x86_64 (9/13), 206.3 KiB (460.5 KiB unpacked)
+    node1: Retrieving: libext2fs2-1.46.4-150400.3.3.1.x86_64.rpm [done]
+    node1: Retrieving package runc-1.1.10-150000.55.1.x86_64 (10/13),   2.8 MiB (  9.4 MiB unpacked)
+    node1: Retrieving: runc-1.1.10-150000.55.1.x86_64.rpm [done]
+    node1: Retrieving package e2fsprogs-1.46.4-150400.3.3.1.x86_64 (11/13), 924.8 KiB (  4.1 MiB unpacked)
+    node1: Retrieving: e2fsprogs-1.46.4-150400.3.3.1.x86_64.rpm [done]
+    node1: Retrieving package containerd-1.7.8-150000.103.1.x86_64 (12/13),  19.4 MiB ( 79.1 MiB unpacked)
+    node1: Retrieving: containerd-1.7.8-150000.103.1.x86_64.rpm [..done (15.7 MiB/s)]
+    node1: Retrieving package docker-24.0.7_ce-150000.190.4.x86_64 (13/13),  25.5 MiB (103.2 MiB unpacked)
+    node1: Retrieving: docker-24.0.7_ce-150000.190.4.x86_64.rpm [.done (21.1 MiB/s)]
+    node1: 
+    node1: Checking for file conflicts: [........done]
+    node1: ( 1/13) Installing: libip6tc2-1.8.7-1.1.x86_64 [....done]
+    node1: ( 2/13) Installing: libnfnetlink0-1.0.1-2.11.x86_64 [.....done]
+    node1: ( 3/13) Installing: libnftnl11-1.2.0-150400.1.6.x86_64 [.........done]
+    node1: ( 4/13) Installing: xz-5.2.3-150000.4.7.1.x86_64 [...........done]
+    node1: ( 5/13) Installing: libnetfilter_conntrack3-1.0.7-1.38.x86_64 [.......done]
+    node1: ( 6/13) Installing: xtables-plugins-1.8.7-1.1.x86_64 [............done]
+    node1: ( 7/13) Installing: iptables-1.8.7-1.1.x86_64 [...........
+    node1: update-alternatives: using /usr/sbin/xtables-legacy-multi to provide /usr/sbin/iptables (iptables) in auto mode
+    node1: done]
+    node1: ( 8/13) Installing: catatonit-0.1.7-150300.10.3.1.x86_64 [............done]
+    node1: ( 9/13) Installing: libext2fs2-1.46.4-150400.3.3.1.x86_64 [..........done]
+    node1: (10/13) Installing: runc-1.1.10-150000.55.1.x86_64 [............done]
+    node1: (11/13) Installing: e2fsprogs-1.46.4-150400.3.3.1.x86_64 [............
+    node1: install-info: No such file or directory for /usr/share/info/libext2fs.info.gz
+    node1: done]
+    node1: (12/13) Installing: containerd-1.7.8-150000.103.1.x86_64 [............done]
+    node1: (13/13) Installing: docker-24.0.7_ce-150000.190.4.x86_64 [..
+    node1: /usr/sbin/groupadd -r docker
+    node1: /usr/sbin/useradd -r -c docker --userns-remap=default -d / -U dockremap -s /usr/sbin/nologin
+    node1: ..........
+    node1: Updating /etc/sysconfig/docker ...
+    node1: done]
+    node1: Executing %posttrans script 'e2fsprogs-1.46.4-150400.3.3.1.x86_64.rpm' [....done]
+    node1: Created symlink /etc/systemd/system/multi-user.target.wants/docker.service → /usr/lib/systemd/system/docker.service.
