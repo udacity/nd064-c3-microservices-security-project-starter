@@ -17,9 +17,8 @@ export IP_VAGRANT="192.168.50.101"
 
 DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
 
-l() {
+line() {
     echo "================================================================================"
-
 }
 
 run() {
@@ -39,7 +38,7 @@ run() {
 
 
 do_100() {
-    l()
+    line
     echo "Init Docker"
     sudo systemctl start docker
     sudo chmod 666 /var/run/docker.sock
@@ -50,7 +49,7 @@ do_100() {
     echo "Login to Docker Hub"
     docker login
 
-    l()
+    line
     echo "Clone the project and init .ssh/known_hosts"
     if [ ! -d "$PROJECT_DIR" ]; then
         cd ~
@@ -70,14 +69,14 @@ do_100() {
     fi
 
     rke --version
-    l()
+    line
 
 }
 
 do_200() {
     vagrant up 2>&1 | tee vagrant_up.log
 
-    l()
+    line
     echo "Vagrant is up"
     echo "\n\n\nHost credentials: $USER_HOST : $PASS_HOST"; 
     echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
@@ -89,17 +88,17 @@ do_200() {
     ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
     sleep 10
     echo "SSH key copied to Vagrant.\n\n"
-    l()
+    line
     rke up --ignore-docker-version --config cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
-    l()
+    line
     kubectl --kubeconfig kube_config_cluster.yml get nodes
     kubectl --kubeconfig kube_config_cluster.yml get pods -A
     docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
     docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
     docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
 
-    l()
+    line
     echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
     echo "Use password: $PASS_VAGRANT for Vagrant if needed"
     echo "Execute the following commands:\n\n
