@@ -1,0 +1,981 @@
+[INFO] 20.10 CIS Docker Community Edition Benchmark
+[INFO] 1 Host Configuration
+[INFO] 1.1 Linux Hosts Specific Configuration
+[FAIL] 1.1.1 Ensure a separate partition for containers has been created (Manual)
+[WARN] 1.1.2 Ensure only trusted users are allowed to control Docker daemon (Manual)
+[FAIL] 1.1.3 Ensure auditing is configured for the docker daemon (Automated)
+[FAIL] 1.1.4 Ensure auditing is configured for Docker files and directories - /run/containerd (Automated)
+[FAIL] 1.1.5 Ensure auditing is configured for Docker files and directories - /var/lib/docker (Manual)
+[FAIL] 1.1.6 Ensure auditing is configured for Docker files and directories - /etc/docker (Automated)
+[FAIL] 1.1.7 Ensure auditing is configured for Docker files and directories - docker.service (Automated)
+[FAIL] 1.1.8 Ensure auditing is configured for Docker files and directories - containerd.sock (Automated)
+[FAIL] 1.1.9 Ensure auditing is configured for Docker files and directories - docker.socket (Automated)
+[FAIL] 1.1.10 Ensure auditing is configured for Docker files and directories - /etc/default/docker (Automated)
+[FAIL] 1.1.11 Ensure auditing is configured for Docker files and directories - /etc/docker/daemon.json (Automated)
+[FAIL] 1.1.12 Ensure auditing is configured for Docker files and directories - /etc/containerd/config.toml (Automated)
+[WARN] 1.1.13 Ensure auditing is configured for Docker files and directories - /etc/sysconfig/docker (Automated)
+[FAIL] 1.1.14 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd (Automated)
+[FAIL] 1.1.15 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim (Manual)
+[FAIL] 1.1.16 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v1 (Automated)
+[FAIL] 1.1.17 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v2 (Manual)
+[FAIL] 1.1.18 Ensure auditing is configured for Docker files and directories - /usr/bin/runc (Manual)
+[INFO] 1.2 General Configuration
+[WARN] 1.2.1 Ensure the container host has been Hardened (Manual)
+[WARN] 1.2.2 Ensure that the version of Docker is up to date (Manual)
+[INFO] 2 Docker daemon configuration
+[WARN] 2.1 Run the Docker daemon as a non-root user, if possible (Manual)
+[FAIL] 2.2 Ensure network traffic is restricted between containers on the default bridge (Manual)
+	 bridge: map[com.docker.network.bridge.default_bridge:true com.docker.network.bridge.enable_icc:true com.docker.network.bridge.enable_ip_masquerade:true com.docker.network.bridge.host_binding_ipv4:0.0.0.0 com.docker.network.bridge.name:docker0 com.docker.network.driver.mtu:1500]
+	 host: map[]
+	 none: map[]
+	 notary_mdb: map[]
+	 notary_sig: map[]
+	 udacredit-monolith_default: map[]
+	 vuln_app_default: map[]
+	 
+[PASS] 2.3 Ensure the logging level is set to 'info' (Manual)
+[PASS] 2.4 Ensure Docker is allowed to make changes to iptables (Manual)
+[WARN] 2.5 Ensure insecure registries are not used (Manual)
+[PASS] 2.6 Ensure aufs storage driver is not used (Manual)
+[FAIL] 2.7 Ensure TLS authentication for Docker daemon is configured (Manual)
+	 root      419003       1  0 17:54 ?        00:00:05 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+	 root      424185  424183  0 18:16 pts/9    00:00:00 grep dockerd
+	 grep: /etc/docker/daemon.json: No such file or directory
+	 
+[WARN] 2.8 Ensure the default ulimit is configured appropriately (Manual)
+[FAIL] 2.9 Enable user namespace support (Manual)
+	 [name=apparmor name=seccomp,profile=builtin name=cgroupns]
+	 
+[PASS] 2.10 Ensure the default cgroup usage has been confirmed (Manual)
+[PASS] 2.11 Ensure base device size is not changed until needed (Manual)
+[PASS] 2.12 Ensure that authorization for Docker client commands is enabled (Manual)
+[PASS] 2.13 Ensure centralized and remote logging is configured (Manual)
+[FAIL] 2.14 Ensure containers are restricted from acquiring new privileges (Manual)
+	 root      419003       1  0 17:54 ?        00:00:05 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+	 root      424237  424235  0 18:16 pts/9    00:00:00 grep dockerd
+	 grep: /etc/docker/daemon.json: No such file or directory
+	 
+[FAIL] 2.15 Ensure live restore is Enabled (Manual)
+	 LiveRestoreEnabled=false
+	 grep: /etc/docker/daemon.json: No such file or directory
+	 
+[FAIL] 2.16 Ensure Userland Proxy is Disabled (Manual)
+	 root      419003       1  0 17:54 ?        00:00:05 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+	 root      424271  424269  0 18:16 pts/9    00:00:00 grep dockerd
+	 grep: /etc/docker/daemon.json: No such file or directory
+	 
+[WARN] 2.17 Ensure that a daemon-wide custom seccomp profile is applied if appropriate (Manual)
+[PASS] 2.18 Ensure that experimental features are not implemented in production (Manual)
+[INFO] 3 Docker daemon configuration files
+[PASS] 3.1 Ensure that the docker.service file ownership is set to root:root (Automated)
+[PASS] 3.2 Ensure that docker.service file permissions are appropriately set (Automated)
+[PASS] 3.3 Ensure that docker.socket file ownership is set to root:root (Automated)
+[PASS] 3.4 Ensure that docker.socket file permissions are set to 644 or more restrictive (Automated)
+[PASS] 3.5 Ensure that the /etc/docker directory ownership is set to root:root (Automated)
+[PASS] 3.6 Ensure that /etc/docker directory permissions are set to 755 or more restrictive (Automated)
+[FAIL] 3.7 Ensure that registry certificate file ownership is set to root:root (Automated)
+	 stat: cannot statx '/etc/docker/certs.d/*': No such file or directory
+	 
+[FAIL] 3.8 Ensure that registry certificate file permissions are set to 444 or more restrictive (Automated)
+	 stat: cannot statx '/etc/docker/certs.d/*': No such file or directory
+	 
+[WARN] 3.9 Ensure that TLS CA certificate file ownership is set to root:root (Manual)
+[WARN] 3.10 Ensure that TLS CA certificate file permissions are set to 444 or more restrictive (Manual)
+[WARN] 3.11 Ensure that Docker server certificate file ownership is set to root:root (Manual)
+[WARN] 3.12 Ensure that the Docker server certificate file permissions are set to 444 or more restrictive (Manual)
+[WARN] 3.13 Ensure that the Docker server certificate key file ownership is set to root:root (Manual)
+[WARN] 3.14 Ensure that the Docker server certificate key file permissions are set to 400 (Manual)
+[PASS] 3.15 Ensure that the Docker socket file ownership is set to root:docker (Automated)
+[PASS] 3.16 Ensure that the Docker socket file permissions are set to 660 or more restrictive (Automated)
+[FAIL] 3.17 Ensure that the daemon.json file ownership is set to root:root (Manual)
+	 stat: cannot statx '/etc/docker/daemon.json': No such file or directory
+	 
+[FAIL] 3.18 Ensure that daemon.json file permissions are set to 644 or more restrictive (Manual)
+	 stat: cannot statx '/etc/docker/daemon.json': No such file or directory
+	 
+[PASS] 3.19 Ensure that /etc/default/docker file ownership is set to root:root (Manual)
+[FAIL] 3.20 Ensure that /etc/sysconfig/docker file permissions are set to 644 or more restrictive (Manual)
+	 stat: cannot statx '/etc/sysconfig/docker': No such file or directory
+	 
+[FAIL] 3.21 Ensure that the /etc/sysconfig/docker file ownership is set to root:root (Manual)
+	 stat: cannot statx '/etc/sysconfig/docker': No such file or directory
+	 
+[PASS] 3.22 Ensure that /etc/default/docker file permissions are set to 644 or more restrictive (Manual)
+[PASS] 3.23 Ensure that the Containerd socket file ownershi is set to root:root (Automated)
+[PASS] 3.24 Ensure that the Containerd socket file permissions are set to 660 or more restrictively (Automated)
+[INFO] 4 Container Images and Build File Configuration
+[FAIL] 4.1 Ensure that a user for the container has been created (Manual)
+	 xargs: warning: options --max-args and --replace/-I/-i are mutually exclusive, ignoring previous --max-args value
+	 User=0
+	 
+[WARN] 4.2 Ensure that containers use only trusted base images (Manual)
+[WARN] 4.3 Ensure that unnecessary packages are not installed in the container (Manual)
+[WARN] 4.4 Ensure images are scanned and rebuilt to include security patches (Manual)
+[FAIL] 4.5 Ensure Content trust for Docker is Enabled (Manual)
+	 DOCKER_CONTENT_TRUST=
+	 
+[WARN] 4.6 Ensure HEALTHCHECK instructions have been added to the container images (Manual)
+[WARN] 4.7 Ensure update instructions are not use alone in the Dockerfiles (Manual)
+[WARN] 4.8 Ensure setuid and setgid permissions are removed (Manual)
+[WARN] 4.9 Ensure COPY is used instead of ADD in Dockerfiles (Manual)
+[WARN] 4.10 Ensure secrets are not stored in Dockerfiles (Manual)
+[WARN] 4.11 Ensure only verified packages are are Installed (Manual)
+[WARN] 4.12 Ensure all signed artifacts are validated (Manual)
+[INFO] 5 Container Runtime Configuration
+[WARN] 5.1 Ensure swarm mode is not Enabled, if not needed (Manual)
+[WARN] 5.2 Ensure that, if applicable, an AppArmor Profile is enabled (Manual)
+[WARN] 5.3 Ensure that, if applicable, SELinux security options are set(Manual)
+[WARN] 5.4 Ensure that Linux Kernel capabilities are restricted within containers (Manual)
+[PASS] 5.5 Ensure that privileged containers are not used (Manual)
+[PASS] 5.6 Ensure sensitive host system directories are not mounted on containers (Manual)
+[WARN] 5.7 Ensure sshd is not run within containers (Manual)
+[WARN] 5.8 Ensure privileged ports are not mapped within containers (Manual)
+[WARN] 5.9 Ensure that only needed ports are open on the container (Manual)
+[PASS] 5.10 Ensure that the host's network namespace is not shared (Manual)
+[FAIL] 5.11 Ensure that the memory usage for container is limited (Manual)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249:Memory=0
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7:Memory=0
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6:Memory=0
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594:Memory=0
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605:Memory=0
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4:Memory=0
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a:Memory=0
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b:Memory=0
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304:Memory=0
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609:Memory=0
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd:Memory=0
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba:Memory=0
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7:Memory=0
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d:Memory=0
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44:Memory=0
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf:Memory=0
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4:Memory=0
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea:Memory=0
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c:Memory=0
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04:Memory=0
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c:Memory=0
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7:Memory=0
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86:Memory=0
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e:Memory=0
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999:Memory=0
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca:Memory=0
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d:Memory=0
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015:Memory=0
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c:Memory=0
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834:Memory=0
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb:Memory=0
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5:Memory=0
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578:Memory=0
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836:Memory=0
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844:Memory=0
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7:Memory=0
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d:Memory=0
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f:Memory=0
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87:Memory=0
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84:Memory=0
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409:Memory=0
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28:Memory=0
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9:Memory=0
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98:Memory=0
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14:Memory=0
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275:Memory=0
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca:Memory=0
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c:Memory=0
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c:Memory=0
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9:Memory=0
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c:Memory=0
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:Memory=0
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85:Memory=0
+	 
+[FAIL] 5.12 Ensure that CPU priority is set appropriately on container (Manual)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249:CpuShares=0
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7:CpuShares=0
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6:CpuShares=0
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594:CpuShares=0
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605:CpuShares=0
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4:CpuShares=0
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a:CpuShares=0
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b:CpuShares=0
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304:CpuShares=0
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609:CpuShares=0
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd:CpuShares=0
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba:CpuShares=0
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7:CpuShares=0
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d:CpuShares=0
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44:CpuShares=0
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf:CpuShares=0
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4:CpuShares=0
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea:CpuShares=0
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c:CpuShares=0
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04:CpuShares=0
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c:CpuShares=0
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7:CpuShares=0
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86:CpuShares=0
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e:CpuShares=0
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999:CpuShares=0
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca:CpuShares=0
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d:CpuShares=0
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015:CpuShares=0
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c:CpuShares=0
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834:CpuShares=0
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb:CpuShares=0
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5:CpuShares=0
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578:CpuShares=0
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836:CpuShares=0
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844:CpuShares=0
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7:CpuShares=0
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d:CpuShares=0
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f:CpuShares=0
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87:CpuShares=0
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84:CpuShares=0
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409:CpuShares=0
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28:CpuShares=0
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9:CpuShares=0
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98:CpuShares=0
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14:CpuShares=0
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275:CpuShares=0
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca:CpuShares=0
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c:CpuShares=0
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c:CpuShares=0
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9:CpuShares=0
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c:CpuShares=0
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:CpuShares=0
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85:CpuShares=0
+	 
+[FAIL] 5.12 Ensure that the container's root filesystem is mounted as read only (Manual)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249:ReadonlyRootfs=false
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7:ReadonlyRootfs=false
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6:ReadonlyRootfs=false
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594:ReadonlyRootfs=false
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605:ReadonlyRootfs=false
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4:ReadonlyRootfs=false
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a:ReadonlyRootfs=false
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b:ReadonlyRootfs=false
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304:ReadonlyRootfs=false
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609:ReadonlyRootfs=false
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd:ReadonlyRootfs=false
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba:ReadonlyRootfs=false
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7:ReadonlyRootfs=false
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d:ReadonlyRootfs=false
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44:ReadonlyRootfs=false
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf:ReadonlyRootfs=false
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4:ReadonlyRootfs=false
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea:ReadonlyRootfs=false
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c:ReadonlyRootfs=false
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04:ReadonlyRootfs=false
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c:ReadonlyRootfs=false
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7:ReadonlyRootfs=false
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86:ReadonlyRootfs=false
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e:ReadonlyRootfs=false
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999:ReadonlyRootfs=false
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca:ReadonlyRootfs=false
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d:ReadonlyRootfs=false
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015:ReadonlyRootfs=false
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c:ReadonlyRootfs=false
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834:ReadonlyRootfs=false
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb:ReadonlyRootfs=false
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5:ReadonlyRootfs=false
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578:ReadonlyRootfs=false
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836:ReadonlyRootfs=false
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844:ReadonlyRootfs=false
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7:ReadonlyRootfs=false
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d:ReadonlyRootfs=false
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f:ReadonlyRootfs=false
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87:ReadonlyRootfs=false
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84:ReadonlyRootfs=false
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409:ReadonlyRootfs=false
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28:ReadonlyRootfs=false
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9:ReadonlyRootfs=false
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98:ReadonlyRootfs=false
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14:ReadonlyRootfs=false
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275:ReadonlyRootfs=false
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca:ReadonlyRootfs=false
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c:ReadonlyRootfs=false
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c:ReadonlyRootfs=false
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9:ReadonlyRootfs=false
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c:ReadonlyRootfs=false
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:ReadonlyRootfs=false
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85:ReadonlyRootfs=false
+	 
+[FAIL] 5.14 Ensure that incoming container traffic is bound to a specific host interface (Manual)
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:Ports=map[5000/tcp:[map[HostIp:0.0.0.0 HostPort:5000] map[HostIp::: HostPort:5000]]]
+	 
+[FAIL] 5.15 Ensure that the 'on-failure' container restart policy is set to '5' (Manual)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249: RestartPolicyName=no MaximumRetryCount=0
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7: RestartPolicyName=no MaximumRetryCount=0
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6: RestartPolicyName=no MaximumRetryCount=0
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594: RestartPolicyName=no MaximumRetryCount=0
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605: RestartPolicyName=no MaximumRetryCount=0
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4: RestartPolicyName=no MaximumRetryCount=0
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a: RestartPolicyName=no MaximumRetryCount=0
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b: RestartPolicyName=no MaximumRetryCount=0
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304: RestartPolicyName=no MaximumRetryCount=0
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609: RestartPolicyName=no MaximumRetryCount=0
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd: RestartPolicyName=no MaximumRetryCount=0
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba: RestartPolicyName=no MaximumRetryCount=0
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7: RestartPolicyName=no MaximumRetryCount=0
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d: RestartPolicyName=no MaximumRetryCount=0
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44: RestartPolicyName=no MaximumRetryCount=0
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf: RestartPolicyName=no MaximumRetryCount=0
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4: RestartPolicyName=no MaximumRetryCount=0
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea: RestartPolicyName=no MaximumRetryCount=0
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c: RestartPolicyName=no MaximumRetryCount=0
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04: RestartPolicyName=no MaximumRetryCount=0
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c: RestartPolicyName=no MaximumRetryCount=0
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7: RestartPolicyName=no MaximumRetryCount=0
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86: RestartPolicyName=no MaximumRetryCount=0
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e: RestartPolicyName=no MaximumRetryCount=0
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999: RestartPolicyName=no MaximumRetryCount=0
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca: RestartPolicyName=no MaximumRetryCount=0
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d: RestartPolicyName=no MaximumRetryCount=0
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015: RestartPolicyName=no MaximumRetryCount=0
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c: RestartPolicyName=no MaximumRetryCount=0
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834: RestartPolicyName=no MaximumRetryCount=0
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb: RestartPolicyName=no MaximumRetryCount=0
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5: RestartPolicyName=no MaximumRetryCount=0
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578: RestartPolicyName=no MaximumRetryCount=0
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836: RestartPolicyName=no MaximumRetryCount=0
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844: RestartPolicyName=no MaximumRetryCount=0
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7: RestartPolicyName=no MaximumRetryCount=0
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d: RestartPolicyName=no MaximumRetryCount=0
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f: RestartPolicyName=no MaximumRetryCount=0
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87: RestartPolicyName=no MaximumRetryCount=0
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84: RestartPolicyName=no MaximumRetryCount=0
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409: RestartPolicyName=no MaximumRetryCount=0
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28: RestartPolicyName=no MaximumRetryCount=0
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9: RestartPolicyName=no MaximumRetryCount=0
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98: RestartPolicyName=no MaximumRetryCount=0
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14: RestartPolicyName=no MaximumRetryCount=0
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275: RestartPolicyName=no MaximumRetryCount=0
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca: RestartPolicyName=no MaximumRetryCount=0
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c: RestartPolicyName=no MaximumRetryCount=0
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c: RestartPolicyName=no MaximumRetryCount=0
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9: RestartPolicyName=no MaximumRetryCount=0
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c: RestartPolicyName=no MaximumRetryCount=0
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e: RestartPolicyName=always MaximumRetryCount=0
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85: RestartPolicyName=no MaximumRetryCount=0
+	 
+[PASS] 5.16 Ensure that the host's process namespace is not shared (Manual)
+[PASS] 5.17 Ensure that the host's IPC namespace is not shared (Manual)
+[WARN] 5.18 Ensure that host devices are not directly exposed to containers (Manual)
+[WARN] 5.19 Ensure that the default ulimit is overwritten at runtime if needed (Manual)
+[WARN] 5.20 Ensure mount propagation mode is not set to shared (Manual)
+[PASS] 5.20 Ensure that the host's UTS namespace is not shared (Manual)
+[PASS] 5.22 Ensure the default seccomp profile is not Disabled (Manual)
+[PASS] 5.23 Ensure that docker exec commands are not used with the privileged option (Manual)
+[FAIL] 5.24 Ensure that docker exec commands are not used with the user=root option (Manual)
+	 <no matches>
+	 
+[WARN] 5.25 Ensure cgroup usage is confirmed (Manual)
+[FAIL] 5.26 Ensure that the container is restricted from acquiring additional privileges (Manual)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249:SecurityOpt=<no value>
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7:SecurityOpt=<no value>
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6:SecurityOpt=<no value>
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594:SecurityOpt=<no value>
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605:SecurityOpt=<no value>
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4:SecurityOpt=<no value>
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a:SecurityOpt=<no value>
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b:SecurityOpt=<no value>
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304:SecurityOpt=<no value>
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609:SecurityOpt=<no value>
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd:SecurityOpt=<no value>
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba:SecurityOpt=<no value>
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7:SecurityOpt=<no value>
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d:SecurityOpt=<no value>
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44:SecurityOpt=<no value>
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf:SecurityOpt=<no value>
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4:SecurityOpt=<no value>
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea:SecurityOpt=<no value>
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c:SecurityOpt=<no value>
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04:SecurityOpt=<no value>
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c:SecurityOpt=<no value>
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7:SecurityOpt=<no value>
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86:SecurityOpt=<no value>
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e:SecurityOpt=<no value>
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999:SecurityOpt=<no value>
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca:SecurityOpt=<no value>
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d:SecurityOpt=<no value>
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015:SecurityOpt=<no value>
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c:SecurityOpt=<no value>
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834:SecurityOpt=<no value>
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb:SecurityOpt=<no value>
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5:SecurityOpt=<no value>
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578:SecurityOpt=<no value>
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836:SecurityOpt=<no value>
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844:SecurityOpt=<no value>
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7:SecurityOpt=<no value>
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d:SecurityOpt=<no value>
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f:SecurityOpt=<no value>
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87:SecurityOpt=<no value>
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84:SecurityOpt=<no value>
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409:SecurityOpt=<no value>
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28:SecurityOpt=<no value>
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9:SecurityOpt=<no value>
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98:SecurityOpt=<no value>
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14:SecurityOpt=<no value>
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275:SecurityOpt=<no value>
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca:SecurityOpt=<no value>
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c:SecurityOpt=<no value>
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c:SecurityOpt=<no value>
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9:SecurityOpt=<no value>
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c:SecurityOpt=<no value>
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:SecurityOpt=<no value>
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85:SecurityOpt=<no value>
+	 
+[WARN] 5.27 Ensure that container health is checked at runtime (Manual)
+[WARN] 5.28 Ensure that Docker commands always make use of the latest  version of their image (Manual)
+[FAIL] 5.29 Ensure that the PIDs cgroup limit is used (Automated)
+	 bf427848a354a24c4221e381189d29dd85881e269e9e1f67811ef24dcaf6c249:PidsLimit=<no value>
+	 ecf862f70c26bec704d04c906a394ed4b8dbc01d930d5f3d514e6c121809e8d7:PidsLimit=<no value>
+	 b21ea305df6460c8a957eb03a15565752440ab689b6af7398db1c04109e0d9b6:PidsLimit=<no value>
+	 6913c5973e694c0b04954be7fcbc5bd7fc3ded33880de885aef171744f7cc594:PidsLimit=<no value>
+	 3d92ae97cf3eb4686c9cb900f2e3c8a19e2a173b4e9c3b92628e51a492728605:PidsLimit=<no value>
+	 2a11f7fc8f88bdb532618626126d000f1a9625f93d4df4aad55110d1532c91d4:PidsLimit=<no value>
+	 2eed0133f5b83c6a32cb1d5a599382596c7501003f69d39e6854a1ab9c989c2a:PidsLimit=<no value>
+	 fcfb05d352afeb5fefce7fcbb52dcd6670177e7382e158975d98a11ac166523b:PidsLimit=<no value>
+	 6453b58a4ca0c123ea6306dacecc7ad4159fa72be0bc50bc087bf16269887304:PidsLimit=<no value>
+	 87393045c3c04c9d9429c4cfba944207a59e1b2ea50f1fb1c850cbced3c4f609:PidsLimit=<no value>
+	 54b8c653aaf0d9e07a353a7f82336233e1b276340fe0a6c236b0c686707e34fd:PidsLimit=<no value>
+	 ce124d8e281494c7cf83d629b18d3f8e9f0fbb2e8090d745749e7af4906f42ba:PidsLimit=<no value>
+	 69fd14863628e2f1b1e74f1a1f782472728e8e2ba626a0e1b1e5576f294bbee7:PidsLimit=<no value>
+	 e7c0c5842b838987cea152b4f7df7c139dbaa285e7672fe29449715dec72297d:PidsLimit=<no value>
+	 a4488166ea34d418e44a57d811133bf4c4ff4e8be62e34b9939f881b1e112e44:PidsLimit=<no value>
+	 ffe5c9aeeebb19c3a5f836b8f1adb7fa5dfae98472e00e3a310d67d43ecf7cbf:PidsLimit=<no value>
+	 92d01be2c176521f0ac92a3dbfa0257308d42acd8edf821ad9723a0f6a626bf4:PidsLimit=<no value>
+	 9ea37ffa3e6d867d9c3d6bb630a7aa7c6a3f051973891181468e4a4df72533ea:PidsLimit=<no value>
+	 ecd5e6ef4a3a4c3eb28335c8b71e660caa5e88cc5bcbfbfff7c7a63c8f67b38c:PidsLimit=<no value>
+	 bc10b3463d061a591c34bbaa05c44fac1bfbf1480bf0aaaa3f2953c6ffef6a04:PidsLimit=<no value>
+	 75dbac9ec82dbc5d422ba0966ce2d8de913d8d3e43ea97d260cb44cb8250532c:PidsLimit=<no value>
+	 6b4378bab0dedd1fd75952af453871deae80834889aaf683edf3e9e93676bfe7:PidsLimit=<no value>
+	 76926f27f32546b2d7b8bbece4c1c3c9c579b1ba22d74c08d37edc9c56bf0e86:PidsLimit=<no value>
+	 bb68b5b1ad399196c2c7f03f6613525956234ea522aa2cfef89b2c7d845f5c9e:PidsLimit=<no value>
+	 110e4992d6114d2a6ac1e854f1baba489a7fa45f34bb547c08f2bcf339d29999:PidsLimit=<no value>
+	 e19e55b818cc8fbca88fb0d0f8cefdd50d3af7d389b7e360d2c085ff183fbdca:PidsLimit=<no value>
+	 72a88b314b443f5af530fe891c01e96d57bebce3d6724d32003374aa9046bf2d:PidsLimit=<no value>
+	 b4c8aee0e277e05976039e51763cac51ace096f3897486256291c86e888a6015:PidsLimit=<no value>
+	 6b3efb982f131f78809fb5324f7b154c7a85163cb69840f54595f1111731016c:PidsLimit=<no value>
+	 c8fa36375863ed7452c567eef6b2a112b38ad4bae76d157235271e7596bd0834:PidsLimit=<no value>
+	 512f0625ea25e6fce4277458cae225339812825c63c1b6361cfea942141f9dcb:PidsLimit=<no value>
+	 b72c9b9295b35d2662f445cb3a5c21cb6b46fd760e666e55356d86ee4ceadcc5:PidsLimit=<no value>
+	 d60de236a176479202d42b41e2e1ad48a8a39fe826f0ff5d58e0597c1cad4578:PidsLimit=<no value>
+	 dbf9a8ce49ec10fef4e9c398d0251b9341eb4b84420e898e5b9619247a722836:PidsLimit=<no value>
+	 cf0f11c6a1d9db0c89ed5209902efdeeb671febbf68b02a77485c3d9408c1844:PidsLimit=<no value>
+	 25dc28f365d82e617421e328014064bd3d2a67371c82cacbb3323fd15442c7b7:PidsLimit=<no value>
+	 f95531f4ef53d24234b49d8b806ab316630923fb9a62cf3fc9e948781973978d:PidsLimit=<no value>
+	 9169c0b1ed2fb2efd9a6f6ab63a83a4a8247494a7d39bb011765f61e323c4f0f:PidsLimit=<no value>
+	 62611483f93f5318c1832bd8ae2be44370c2ac7f580a79a80ca2e1e842b7fe87:PidsLimit=<no value>
+	 cdcf03bdde58670295696e879f6b5f07a8d026255106453684ab8882d7c5fa84:PidsLimit=<no value>
+	 b30cd5fd7b4959b54057668ba85d273716bab1741b11e9853b131e89fe470409:PidsLimit=<no value>
+	 1ed22fa462ded3d42ba449bfb89a4c4518cc40ce48fe68ccbc51494bc0462d28:PidsLimit=<no value>
+	 f502c034017bf0737386ad1291cbe97741136745d2bbfaa3dbdd787498a38ca9:PidsLimit=<no value>
+	 5d57c3a107ff29b8c7cad3cd5cb75d21dbb50331823adabd32a638ead64d0d98:PidsLimit=<no value>
+	 80ebfccbd27ff439b14b0a0c18bae322f167f11301ec224c0e4fd6a0a5cd2e14:PidsLimit=<no value>
+	 1126546fabade18a271faeb189cad789ba47fe15d4fcf2a1714e7fcf7226a275:PidsLimit=<no value>
+	 3d64c8db80c6761230f7e4faaa26fba96b1a2232d21539eaaced472e356742ca:PidsLimit=<no value>
+	 03cdf7898e8002b2e34a8aca627ef91c7b8ecea9a8734c2beb2291222504263c:PidsLimit=<no value>
+	 215faa3042d43f766e23d6642d1c7ae4312b12bc417a90ebfdd94c0a9f28a67c:PidsLimit=<no value>
+	 6eec90f08f0326f1e57c8d9e2d482c9c26565d2cc7cb12695ff2c0fdb7adf2c9:PidsLimit=<no value>
+	 88c1328a12934da56e4ae2bf393bcc1ca49150ed726ce1ad8929bcf516bc453c:PidsLimit=<no value>
+	 6c723d35d4c07ec41620f9cd568244f3f08e57b32ae8aac3eadbb519bb258d3e:PidsLimit=<no value>
+	 64f4ab14a82b6e05ea02f8a30e3ff2d54544099470cab60554f083ca022ddd85:PidsLimit=<no value>
+	 
+[WARN] 5.30 Ensure that Docker's default bridge docker0 is not used (Manual)
+[PASS] 5.31 Ensure that the host's user namespaces is not shared (Manual)
+[PASS] 5.32 Ensure that the Docker socket is not mounted inside any containers (Manual)
+[INFO] 6 Docker Security Operations
+[WARN] 6.1 Ensure that image sprawl is avoided (Manual)
+[WARN] 6.2 Ensure that container sprawl is avoided (Manual)
+[INFO] 7 Docker Swarm Configuration
+[INFO] 7.1 Ensure swarm mode is not Enabled, if not needed (Automated)
+[INFO] 7.1 Ensure that the minimum number of manager nodes have been created in a swarm (Manual)
+[INFO] 7.2 Ensure that swarm services are bound to a specific host interface (Manual)
+[INFO] 7.3 Ensure that all Docker swarm overlay networks are encrypted (Manual)
+[INFO] 7.4 Ensure that Docker's secret management commands are used for managing secrets in a swarm cluster (Manual)
+[INFO] 7.5 Ensure that swarm manager is run in auto-lock mode (Manual)
+[INFO] 7.6 Ensure that the swarm manager auto-lock key is rotated periodically (Manual)
+[INFO] 7.7 Ensure that node certificates are rotated as appropriate (Manual)
+[INFO] 7.8 Ensure that CA certificates are rotated as appropriate (Manual)
+[INFO] 7.9 Ensure that management plane traffic is separated from data plane traffic (Manual)
+
+== Remediations ==
+1.1.1 For new installations, you should create a separate partition for the /var/lib/docker mount point.
+For systems which have already been installed, 
+you should use the Logical Volume Manager (LVM)
+within Linux to create a new partition.
+
+1.1.2 You should remove any untrusted users from the docker group. 
+Additionally, you should not create a mapping of sensitive directories from the host to container volumes."
+
+1.1.3 You should add rules for the Docker daemon. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file: 
+-w /usr/bin/dockerd -k docker
+Then, restart the audit daemon using the following command 
+systemctl restart auditd
+
+1.1.4 You should add a rule for the /var/lib/docker directory. 
+For example, 
+Add the line as below to the /etc/audit/audit.rules file:
+-a exit,always -F path=/run/containerd -F perm=war -k docker
+Then restart the audit daemon. For example, 
+systemctl restart auditd
+
+1.1.5 You should add a rule for the /var/lib/docker directory. 
+For example, 
+Add the line as below to the /etc/audit/audit.rules file:
+-a exit,always -F path=/var/lib/docker -F perm=war -k docker
+Then restart the audit daemon. For example, 
+systemctl restart auditd
+
+1.1.6 You should add a rule for the /etc/docker directory.
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /etc/docker -k docker
+Then restart the audit daemon. For example: 
+systemctl restart auditd
+
+1.1.7 If the file exists, a rule for it should be added. 
+For example: 
+Add the line as below in /etc/audit/audit.rules file:
+-w /usr/lib/systemd/system/docker.service -k docker
+Then restart the audit daemon. 
+For example:
+systemctl restart auditd
+
+1.1.8 If the file exists, you should add a rule for it. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /run/containerd/containerd.sock -k docker
+Then restart the audit daemon. 
+For example:
+systemctl restart auditd
+
+1.1.9 If the file exists, you should add a rule for it. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w $socket_file -k docker
+Then restart the audit daemon. 
+For example:
+systemctl restart auditd
+
+1.1.10 You should add a rule for the /etc/default/docker directory.
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /etc/default/docker -k docker
+Then restart the audit daemon. For example: 
+systemctl restart auditd
+
+1.1.11 You should add a rule for the /etc/docker/daemon.json directory.
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /etc/docker/daemon.json -k docker
+Then restart the audit daemon. For example: 
+systemctl restart auditd
+
+1.1.12 You should add a rule for the /etc/containerd/config.toml directory.
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /etc/containerd/config.toml -k docker
+Then restart the audit daemon. For example: 
+systemctl restart auditd
+
+1.1.13 You should add a rule for the /etc/sysconfig/docker file. 
+For example: Add the line below to the /etc/audit/audit.rules file:
+-w /etc/sysconfig/docker -k docker
+Then restart the audit daemon. For example: 
+systemctl restart auditd
+scored: true
+
+1.1.14 You should add a rule for the /usr/bin/containerd file. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /usr/bin/containerd -k docker
+Then restart the audit daemon. 
+For example: 
+systemctl restart auditd
+
+1.1.15 You should add a rule for the /usr/bin/containerd-shim file. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /usr/bin/containerd-shim -k docker
+Then restart the audit daemon. 
+For example: 
+systemctl restart auditd
+
+1.1.16 You should add a rule for the /usr/bin/containerd-shim-runc-v1 file. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /usr/bin/containerd-shim-runc-v1 -k docker
+Then restart the audit daemon. 
+For example: 
+systemctl restart auditd
+
+1.1.17 You should add a rule for the /usr/bin/containerd-shim-runc-v2 file. 
+For example: 
+Add the line below to the /etc/audit/audit.rules file:
+-w /usr/bin/containerd-shim-runc-v2 -k docker
+Then restart the audit daemon. 
+For example: 
+systemctl restart auditd
+
+1.1.18 You should add a rule for /usr/bin/runc file. 
+For example:
+Add the line below to the /etc/audit/audit.rules file: 
+-w /usr/bin/runc -k docker
+Then restart the audit daemon. 
+For example: 
+systemctl restart auditd
+
+1.2.1 You may consider various CIS Security Benchmarks for your container host. 
+If you have other security guidelines or regulatory requirements 
+to adhere to, please follow them as suitable in your environment. 
+
+1.2.2 You should monitor versions of Docker releases and make sure
+your software is updated as required.
+
+2.1 Follow the current Docker documentation on how to install the Docker daemon as a non-root user.
+
+2.2 Edit the Docker daemon configuration file to ensure that icc is disabled. It should include
+the following setting
+"icc": false
+Alernatively, run the docker daemon directly and pass --icc=false as an argument. 
+For Example, 
+dockerd --icc=false
+Alternatively, you can follow the Docker documentation and create a custom network and 
+only join containers that need to communicate to that custom network. The --icc 
+parameter only applies to the default docker bridge, if custom networks are used then the 
+approach of segmenting networks should be adopted instead. 
+In order for this control to be fully effective, all containers connected to the docker0 bridge 
+should drop the NET_RAW capability, otherwise a compromised container could use raw 
+ethernet packets to communicate with other containers despite this restriction.
+
+2.5 You should ensure that no insecure registries are in use.
+
+2.7 Follow the steps mentioned in the Docker documentation or other references.
+
+2.8 Run the docker in daemon mode and pass --default-ulimit as argument with respective
+ulimits as appropriate in your environment.
+For Example,
+dockerd --default-ulimit nproc=1024:2048 --default-ulimit nofile=100:200
+
+2.9 Please consult the Docker documentation for various ways in which this can be configured 
+depending upon your requirements. Your steps might also vary based on platform - For 
+example, on Red Hat, sub-UIDs and sub-GIDs mapping creation do not work automatically.
+You might have to create your own mapping.
+The high-level steps are as below: 
+Step 1: Ensure that the files /etc/subuid and /etc/subgid exist.
+touch /etc/subuid /etc/subgid
+Step 2: Start the docker daemon with --userns-remap flag 
+dockerd --userns-remap=default
+
+2.14 You should run the Docker daemon as below:
+dockerd --no-new-privileges
+
+2.15 Run the docker in daemon mode and pass --live-restore as an argument.
+For Example,
+dockerd --live-restore
+
+2.16 You should run the Docker daemon as below:
+dockerd --userland-proxy=false
+
+2.17 By default, Docker's default seccomp profile is applied. If this is adequate for your 
+environment, no action is necessary. Alternatively, if you choose to apply your own 
+seccomp profile, use the --seccomp-profile flag at daemon start or put it in the daemon 
+runtime parameters file.
+dockerd --seccomp-profile </path/to/seccomp/profile>
+
+3.7 stat: cannot statx '/etc/docker/certs.d/*': No such file or directory
+
+3.8 stat: cannot statx '/etc/docker/certs.d/*': No such file or directory
+
+3.9 You should execute the following command:
+chown root:root <path to TLS CA certificate file>
+This sets the individual ownership and group ownership for the TLS CA certificate file to root.
+
+3.10 You should execute the following command: chmod 444 <path to TLS CA certificate file>
+chmod 444 <path to TLS CA certificate file>
+This sets the file permissions on the TLS CA file to 444.
+
+3.11 You should run the following command:
+chown root:root <path to Docker server certificate file>
+This sets the individual ownership and the group ownership for the Docker server
+certificate file to root.
+
+3.12 You should execute the command below:
+chmod 444 <path to Docker server certificate file>
+This sets the file permissions of the Docker server certificate file to 444 .
+
+3.13 You should execute the following command:
+chown root:root <path to Docker server certificate key file>
+This sets the individual ownership and group ownership for the Docker server certificate
+key file to root.
+
+3.14 You should execute the following command:
+chmod 400 <path to Docker server certificate key file>
+This sets the Docker server certificate key file permissions to 400 .
+
+3.17 stat: cannot statx '/etc/docker/daemon.json': No such file or directory
+
+3.18 stat: cannot statx '/etc/docker/daemon.json': No such file or directory
+
+3.20 stat: cannot statx '/etc/sysconfig/docker': No such file or directory
+
+3.21 stat: cannot statx '/etc/sysconfig/docker': No such file or directory
+
+4.1 You should ensure that the Dockerfile for each container image contains the information below:
+USER <username or ID>
+In this case, the user name or ID refers to the user that was found in the container base
+image. If there is no specific user created in the container base image, then make use of the
+useradd command to add a specific user before the USER instruction in the Dockerfile.
+For example, add the below lines in the Dockerfile to create a user in the container:
+RUN useradd -d /home/username -m -s /bin/bash username
+USER username
+Note: If there are users in the image that are not needed, you should consider deleting
+them. After deleting those users, commit the image and then generate new instances of the
+containers.
+Alternatively, if it is not possible to set the USER directive in the Dockerfile, a script running
+as part of the CMD or ENTRYPOINT sections of the Dockerfile should be used to ensure that
+the container process switches to a non-root user.
+
+4.2 The following procedures are useful for establishing trust for a specific image.
+- Configure and use Docker Content trust.
+- View the history of each Docker image to evaluate its risk, dependent on the
+  sensitivity of the application you wish to deploy using it.
+- Scan Docker images for vulnerabilities at regular intervals.
+
+4.3 You should not install anything within the container that is not required.
+You should consider using a minimal base image rather than the standard
+Redhat/Centos/Debian images if you can. Some of the options available include BusyBox
+and Alpine.
+Not only can this trim your image size considerably, but there would also be fewer pieces of
+software which could contain vectors for attack.
+
+4.4 Images should be re-built ensuring that the latest version of the base images are used, to
+keep the operating system patch level at an appropriate level. Once the images have been
+re-built, containers should be re-started making use of the updated images.
+
+4.5 To enable content trust in a bash shell, enter the following command:
+export DOCKER_CONTENT_TRUST=1
+Alternatively, you could set this environment variable in your profile file so that content 
+trust in enabled on every login.
+
+4.6 You should follow the Docker documentation and rebuild your container images to include
+the HEALTHCHECK instruction.
+
+4.7 You should use update instructions together with install instructions and version pinning
+for packages while installing them. This prevent caching and force the extraction of the
+required versions.
+Alternatively, you could use the --no-cache flag during the docker build process to avoid
+using cached layers.
+
+4.8 You should allow setuid and setgid permissions only on executables which require them.
+You could remove these permissions at build time by adding the following command in
+your Dockerfile, preferably towards the end of the Dockerfile:
+RUN find / -perm /6000 -type f -exec chmod a-s {} \; || true
+
+4.9 You should use COPY rather than ADD instructions in Dockerfiles.
+
+4.10 Do not store any kind of secrets within Dockerfiles. Where secrets are required during the 
+build process, make use of a secrets management tool, such as the buildkit builder included 
+with Docker.
+
+4.11 You should use a secure package distribution mechanism of your choice to ensure the 
+authenticity of software packages.
+
+4.12 Validate every artifact with its signature. It is recommended to do so automatically.
+
+5.1 If swarm mode has been enabled on a system in error, you should run the command
+below:
+docker swarm leave
+
+5.2 If AppArmor is applicable for your Linux OS, you should enable it.
+      1. Verify if AppArmor is installed. If not, install it.
+      2. Create or import a AppArmor profile for Docker containers.
+      3. Put this profile in enforcing mode.
+      4. Start your Docker container using the customized AppArmor profile. For example,
+docker run --interactive --tty --security-opt="apparmor:PROFILENAME" ubuntu
+/bin/bash
+Alternatively, Docker's default AppArmor policy can be used.
+
+5.3 If SELinux is applicable for your Linux OS, you should use it.
+  1. Set the SELinux State.
+  2. Set the SELinux Policy.
+  3. Create or import a SELinux policy template for Docker containers.
+  4. Start Docker in daemon mode with SELinux enabled. For example,
+     docker daemon --selinux-enabled
+  5. Start your Docker container using the security options. For example,
+     docker run --interactive --tty --security-opt label=level:TopSecret centos
+  /bin/bash
+
+5.4 You should execute the command below to add required capabilities:
+docker run --cap-add={"Capability 1","Capability 2"} <Run arguments>
+<Container Image Name or ID> <Command>
+You should execute the command below to remove unneeded capabilities:
+docker run --cap-drop={"Capability 1","Capability 2"} <Run arguments>
+<Container Image Name or ID> <Command>
+Alternatively, you could remove all the currently configured capabilities and then restore
+only the ones you specifically use:
+docker run --cap-drop=all --cap-add={"Capability 1","Capability 2"} <Run
+arguments> <Container Image Name or ID> <Command>
+
+5.7 Uninstall the SSH daemon from the container and use and use docker exec to enter a
+container on the remote host.
+docker exec --interactive --tty <CONTAINER ID> sh
+OR
+docker attach <CONTAINER ID>
+
+5.8 You should not map container ports to privileged host ports when starting a container. You
+should also, ensure that there is no such container to host privileged port mapping
+declarations in the Dockerfile.
+
+5.9 You should ensure that the Dockerfile for each container image only exposes needed ports. 
+You can also completely ignore the list of ports defined in the Dockerfile by NOT using -P 
+(UPPERCASE) or the --publish-all flag when starting the container. Instead, use the -p 
+(lowercase) or --publish flag to explicitly define the ports that you need for a particular
+container instance.
+For example,
+docker run --interactive --tty --publish 5000 --publish 5001 --publish 5002
+centos /bin/bash
+
+5.11 You should run the container with only as much memory as it requires by using the --
+memory argument.
+For example, you could run a container using the command below:
+docker run -d --memory 256m centos sleep 1000
+In the example above, the container is started with a memory limit of 256 MB.
+Verify the memory settings by using the command below:
+docker inspect --format='{{ .Id }}: Memory={{.HostConfig.Memory}}
+KernelMemory={{.HostConfig.KernelMemory}} Swap={{.HostConfig.MemorySwap}}'
+<CONTAINER ID>
+
+5.12 You should manage the CPU runtime between your containers dependent on their
+priority within your organization. To do so start the container using the --cpu-shares
+argument.
+For example, you could run a container as below:
+docker run -d --cpu-shares 512 centos sleep 1000
+In the example above, the container is started with CPU shares of 50% of what other
+containers use. So if the other container has CPU shares of 80%, this container will
+have CPU shares of 40%.
+Every new container will have 1024 shares of CPU by default. However, this value is
+shown as 0 if you run the command mentioned in the audit section.
+If you set one container’s CPU shares to 512 it will receive half of the CPU time
+compared to the other containers. So if you take 1024 as 100% you can then derive the
+number that you should set for respective CPU shares. For example, use 512 if you
+want to set it to 50% and 256 if you want to set it 25%.
+You can also view the current CPU shares in the file
+/sys/fs/cgroup/cpu/docker/<CONTAINER ID>/cpu.shares.
+
+5.12 You should add a --read-only flag at a container's runtime to enforce the container's root
+filesystem being mounted as read only.
+docker run <Run arguments> --read-only <Container Image Name or ID> <Command>
+Enabling the --read-only option at a container's runtime should be used by administrators
+to force a container's executable processes to only write container data to explicit storage
+locations during its lifetime.
+Examples of explicit storage locations during a container's runtime include, but are not
+limited to:
+1. Using the --tmpfs option to mount a temporary file system for non-persistent data
+   writes.
+docker run --interactive --tty --read-only --tmpfs "/run" --tmpfs "/tmp"
+centos /bin/bash
+2. Enabling Docker rw mounts at a container's runtime to persist container data
+   directly on the Docker host filesystem.
+docker run --interactive --tty --read-only -v /opt/app/data:/run/app/data:rw
+centos /bin/bash
+3. Utilizing Docker shared-storage volume plugins for Docker data volume to persist
+   container data.
+docker volume create -d convoy --opt o=size=20GB my-named-volume
+docker run --interactive --tty --read-only -v my-named-volume:/run/app/data
+centos /bin/bash
+3. Transmitting container data outside of the Docker controlled area during the
+   container's runtime for container data in order to ensure that it is persistent.
+   Examples include hosted databases, network file shares and APIs.
+
+5.14 You should bind the container port to a specific host interface on the desired host port.
+For example,
+docker run --detach --publish 10.2.3.4:49153:80 nginx
+In the example above, the container port 80 is bound to the host port on 49153 and would
+accept incoming connection only from 10.2.3.4 external interface.
+
+5.15 If you wish a container to be automatically restarted, a sample command is as below:
+docker run --detach --restart=on-failure:5 nginx
+
+5.18 You should not directly expose host devices to containers. If you do need to expose host
+devices to containers, you should use granular permissions as appropriate to your
+devices to containers, you should use granular permissions as appropriate to your
+For example, do not start a container using the command below:
+docker run --interactive --tty --device=/dev/tty0:/dev/tty0:rwm --
+device=/dev/temp_sda:/dev/temp_sda:rwm centos bash
+You should only share the host device using appropriate permissions:
+docker run --interactive --tty --device=/dev/tty0:/dev/tty0:rw --
+device=/dev/temp_sda:/dev/temp_sda:r centos bash
+
+5.19 You should only override the default ulimit settings if needed in a specific case.
+For example, to override default ulimit settings start a container as below:
+docker run --ulimit nofile=1024:1024 --interactive --tty centos /bin/bash
+
+5.20 Do not mount volumes in shared mode propagation.
+For example, do not start container as below:
+docker run <Run arguments> --volume=/hostPath:/containerPath:shared
+<Container Image Name or ID> <Command>
+
+5.24 <no matches>
+
+5.25 You should not use the --cgroup-parent option within the docker run command unless 
+strictly required.
+
+5.26 You should start your container with the options below: 
+docker run --rm -it --security-opt=no-new-privileges ubuntu bash
+
+5.27 You should run the container using the --health-cmd parameter.
+For example,
+docker run -d --health-cmd='stat /etc/passwd || exit 1' nginx
+
+5.28 You should use proper version pinning mechanisms (the "latest" tag which is assigned by
+default is still vulnerable to caching attacks) to avoid extracting cached older versions.
+Version pinning mechanisms should be used for base images, packages, and entire images.
+You can customize version pinning rules according to your requirements.
+
+5.29 Use --pids-limit flag with an appropriate value when launching the container.
+For example,
+docker run -it --pids-limit 100 <Image_ID>
+In the above example, the number of processes allowed to run at any given time is set to
+100. After a limit of 100 concurrently running processes is reached, Docker would restrict
+any new process creation.
+
+5.30 You should follow the Docker documentation and set up a user-defined network. All the
+containers should be run in this network.
+
+6.1 You should keep only the images that you actually need and establish a workflow to
+remove old or stale images from the host. Additionally, you should use features such as
+pull-by-digest to get specific images from the registry.
+You can follow the steps below to find unused images on the system so they can be deleted.
+Step 1 Make a list of all image IDs that are currently instantiated by executing the
+command below:
+docker images --quiet | xargs docker inspect --format '{{ .Id }}: Image={{
+        .Config.Image }}'
+Step 2: List all the images present on the system by executing the command below:
+docker images
+Step 3: Compare the list of image IDs from Step 1 and Step 2 and look for images that are
+currently not in use. If any unused or old images are found, discuss with the system
+administrator the need to keep such images on the system. If images are no longer needed
+they should be deleted.
+
+6.2 You should periodically check your container inventory on each host and clean up
+containers which are not in active use with the command below:
+docker container prune
+
+7.1 Test marked as skip
+7.1 Test marked as skip
+7.2 Test marked as skip
+7.3 Test marked as skip
+7.4 Test marked as skip
+7.5 Test marked as skip
+7.6 Test marked as skip
+7.7 Test marked as skip
+7.8 Test marked as skip
+7.9 Test marked as skip
+
+== Summary ==
+30 checks PASS
+38 checks FAIL
+40 checks WARN
+10 checks INFO

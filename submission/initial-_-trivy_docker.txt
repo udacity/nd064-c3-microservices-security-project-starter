@@ -1,0 +1,4 @@
+2025-05-02T18:05:50.692+0200	[34mINFO[0m	Need to update DB
+2025-05-02T18:05:50.692+0200	[34mINFO[0m	Downloading DB...
+2025-05-02T18:05:54.759+0200	[34mINFO[0m	Detected OS: unknown
+2025-05-02T18:05:54.760+0200	[34mINFO[0m	Number of PL dependency files: 0
