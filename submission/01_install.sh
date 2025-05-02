@@ -17,6 +17,10 @@ export IP_VAGRANT="192.168.50.101"
 
 DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
 
+l() {
+    echo "================================================================================"
+
+}
 
 run() {
     local section="$1"
@@ -25,11 +29,17 @@ run() {
         RUN=true
         echo "=== Running section: $section ==="
         "$@"
+        read -p "Do you want to continue? (y/n): " answer
+        if [[ "${answer,,}" != "y" ]]; then
+            echo "Aborted."
+            exit 1
+        fi
     fi
 }
 
 
 do_100() {
+    l()
     echo "Init Docker"
     sudo systemctl start docker
     sudo chmod 666 /var/run/docker.sock
@@ -40,6 +50,7 @@ do_100() {
     echo "Login to Docker Hub"
     docker login
 
+    l()
     echo "Clone the project and init .ssh/known_hosts"
     if [ ! -d "$PROJECT_DIR" ]; then
         cd ~
@@ -59,12 +70,15 @@ do_100() {
     fi
 
     rke --version
+    l()
 
 }
 
 do_200() {
-    vagrant up > vagrant_up.log 2>&1 
+    vagrant up 2>&1 | tee vagrant_up.log
 
+    l()
+    echo "Vagrant is up"
     echo "\n\n\nHost credentials: $USER_HOST : $PASS_HOST"; 
     echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
 
@@ -75,18 +89,25 @@ do_200() {
     ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
     sleep 10
     echo "SSH key copied to Vagrant.\n\n"
-
+    l()
     rke up --ignore-docker-version --config cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
+    l()
     kubectl --kubeconfig kube_config_cluster.yml get nodes
     kubectl --kubeconfig kube_config_cluster.yml get pods -A
     docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
     docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
     docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
 
+    l()
     echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
-    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
-    kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened; bash"
+    echo "Use password: $PASS_VAGRANT for Vagrant if needed"
+    echo "Execute the following commands:\n\n
+          ssh $USER_VAGRANT@$IP_VAGRANT
+          docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash
+          kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened
+          kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-permissive
+          "
 
 }
 
@@ -149,7 +170,7 @@ do_1000() {
     cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
 
     echo "Kube-bench configuration:" >> $SUMMARY_FILE
-    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash && \
+    "ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash" && \
     cat /etc/kube-bench/cfg/kube-bench-config.yaml " >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
 
     echo "=============================" >> $SUMMARY_FILE
