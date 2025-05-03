@@ -11,13 +11,14 @@ set -e
 
 export SUBMISSION=~/nd064-c3-microservices-security-project-starter/submission
 export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
-USER_HOST="udacity"
-PASS_HOST="UdacityRocks.1!!"
-USER_VAGRANT="root"
-PASS_VAGRANT="vagrant"
-IP_VAGRANT="192.168.50.101"
+# USER_HOST="udacity"
+# PASS_HOST="UdacityRocks.1!!"
+# USER_VAGRANT="root"
+# PASS_VAGRANT="vagrant"
+# IP_VAGRANT="192.168.50.101"
 
-DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
+DOCKER_IMAGE_initial=~/nd064-c3-microservices-security-project-starter/vuln_app/
+DOCKER_IMAGE_hardened="$SUBMISSION/app"
 
 do_scan() {
     # Check if the first parameter is provided
@@ -26,50 +27,50 @@ do_scan() {
     exit 1
     fi
 
-    # Check if the parameter is either "not_hardened" or "hardened"
-    if [[ "$1" != "not_hardened" && "$1" != "hardened" ]]; then
-    echo "Error: Invalid parameter. Must be 'not_hardened' or 'hardened'."
+    # Check if the parameter is either "initial" or "hardened"
+    if [[ "$1" != "initial" && "$1" != "hardened" ]]; then
+    echo "Error: Invalid parameter. Must be 'initial' or 'hardened'."
     exit 1
     fi
 
+
     # Set the TYPE variable
     export TYPE="$1"
+    export DOCKER_IMAGE="DOCKER_IMAGE_$TYPE"
 
     echo "*****************************************************************************"
     echo "Running security scans... $TYPE"
+    echo ${!DOCKER_IMAGE}
     echo "*****************************************************************************"
     echo -e "\n\n"
-
-    echo "============================================================================="
-    echo "Running STRIDE security scan..."
-    echo "============================================================================="
-    echo "*TODO*"
 
     echo "============================================================================="
     echo "Running Docker-bench security scan..."
     echo "============================================================================="
     cd ~/docker-bench/
-    docker-bench --include-test-output > $SUBMISSION/docker-bench_-_$TYPE.txt
-    echo "Docker-bench results saved to $SUBMISSION/docker-bench_-_$TYPE.txt"
+    pwd
+    sudo ./docker-bench --include-test-output > $SUBMISSION/$TYPE-_-docker-bench.txt
+    echo "Docker-bench results saved to $SUBMISSION/$TYPE-_-docker-bench.txt"
     echo "Check for failed findings in the results."
     cd $PROJECT_DIR
 
     echo "============================================================================="
     echo "Running Kube-bench security scan..."
     echo "============================================================================="
-    ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash && \
-        kube-bench  --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened" > $SUBMISSION/kube-bench_-_$TYPE.txt
-    echo "Kube-bench results saved to $SUBMISSION/kube-bench_-_$TYPE.txt"
+    ssh root@192.168.2.153 'kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.24' > $SUBMISSION/$TYPE-_-kube-bench.txt
+    echo "Kube-bench results saved to $SUBMISSION/$TYPE-_-kube-bench.txt"
     echo "Check for failed findings in the results."
 
     echo "============================================================================="
     echo "Running Grype and Trivy scan on the docker image..."
     echo "============================================================================="
-    grype $DOCKER_IMAGE_VULN > $SUBMISSION/grype_docker_-_$TYPE.txt
-    echo "Grype scan results saved to $SUBMISSION/grype_docker_-_$TYPE.txt"
-    echo "Check for any vulnerabilities listed in the results."
-    trivy image $DOCKER_IMAGE_VULN > $SUBMISSION/trivy_docker_-_$TYPE.txt
-    echo "Trivy scan results saved to $SUBMISSION/trivy_docker_-_$TYPE.txt"
+    echo -e "grype DOCKER_IMAGE_$TYPE > $SUBMISSION/$TYPE-_-grype_docker.txt"
+    grype dir:${!DOCKER_IMAGE} > $SUBMISSION/$TYPE-_-grype_docker.txt
+    echo "Grype scan results saved to $SUBMISSION/$TYPE-_-grype_docker.txt"
+    echo -e "Check for any vulnerabilities listed in the results.\n\n"
+    docker run --rm -v ${!DOCKER_IMAGE}:/app aquasec/trivy fs app > $SUBMISSION/$TYPE-_-trivy_flask.txt
+    # sudo trivy fs ${!DOCKER_IMAGE} > $SUBMISSION/$TYPE-_-trivy_flask.txt
+    echo "Trivy scan results saved to $SUBMISSION/$TYPE-_-trivy_flasr.txt"
     echo "Check for vulnerabilities in the image."
 
 }
@@ -85,8 +86,6 @@ done
 echo "============================================================================="
 echo " TODO "
 echo "============================================================================="
-# add Docker STRIDE threat model evaluation
-# add K8S STRIDE threat model evaluation
 # harden docker image
 # sign docker image
 # define operational test plane for K8S hardening? 

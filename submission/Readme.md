@@ -1,1 +1,3 @@
+app : is the hardened/fixed copy of vuln_app
+
 curl -sSL https://raw.githubusercontent.com/varsanyim/nd064-c3-microservices-security-project-starter/refs/heads/master/submission/01_install.sh -o 01_install.sh | tee install.log;

@@ -1,0 +1,11 @@
+{
+  "data-root": "/docker",
+  "tlsverify": true,
+  "tlscacert": "/etc/docker/certs/ca.pem",
+  "tlscert": "/etc/docker/certs/server-cert.pem",
+  "tlskey": "/etc/docker/certs/server-key.pem",
+  "userns-remap": "default",
+  "live-restore": true,
+  "userland-proxy": false
+}
+

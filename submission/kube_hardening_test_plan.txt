@@ -1,0 +1,33 @@
+To validate changes applied to the Kubernetes cluster, particularly those involving 
+cluster configuration, security hardening, and service behavior, without introducing
+regressions or downtime.
+
+How will I test the changes?
+After updating the cluster.yaml and applying changes via rke up, we will:
+
+    Run health checks using kubectl get nodes, kubectl get pods -A, and kubectl 
+    describe to confirm that all nodes and system pods (e.g. CoreDNS, ingress, 
+    etcd) are healthy.
+
+    Verify admission plugin functionality by attempting to deploy pods that would 
+    be denied by AlwaysPullImages or EventRateLimit.
+
+    Confirm encryption at rest by creating and inspecting Kubernetes Secrets 
+    and verifying the encryption format in etcd (if accessible).
+
+    Run a workload test by deploying a standard microservice (e.g. NGINX or a test 
+    app) and validating connectivity and DNS resolution inside the cluster.
+
+How will I ensure the changes don’t negatively affect your cluster?
+To avoid disruptions:
+
+    All changes will be first applied to a staging cluster with the same configuration.
+
+    A backup snapshot of etcd will be taken before applying updates (etcd snapshot 
+    is configured in the cluster).
+
+    Post-upgrade, we will monitor metrics (e.g. memory, CPU, etc.) and application 
+    logs using Prometheus/Grafana and kubectl logs.
+
+    Regression testing will be automated via CI scripts to validate deployments, 
+    secrets, services, and ingress endpoints.

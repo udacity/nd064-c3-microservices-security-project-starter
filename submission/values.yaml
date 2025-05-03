@@ -1,0 +1,28 @@
+# values.yaml
+
+# Enable Falco with Debian specific headers, drivers, and checksum
+falco:
+  enabled: true
+  # Specify image for Falco daemon
+  image:
+    repository: falcosecurity/falco
+    tag: 0.29.1
+    pullPolicy: IfNotPresent
+
+# Enable falco-exporter to move logs from the pod to Grafana
+falcoExporter:
+  enabled: true
+  image:
+    repository: falcosecurity/falco-exporter
+    tag: latest
+    pullPolicy: IfNotPresent
+
+# Resource requests and limits
+resources:
+  limits:
+    cpu: "500m"
+    memory: "1Gi"
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+

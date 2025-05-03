@@ -1,0 +1,219 @@
+Docker Image Threats:
+    Spoofing
+        Postgres:
+            An attacker could impersonate the Postgres container or host and try to send malicious requests to the application or read sensitive data.
+            Possible Mitigations:
+                Use Docker networking with internal or bridge networks to isolate services.
+                Implement proper authentication (e.g., password or certificate-based) for accessing Postgres.
+        Redis:
+            If Redis is exposed outside of the Docker network or improperly secured, attackers could spoof Redis connections.
+            Possible Mitigations:
+                Restrict access to Redis via firewall rules, binding it only to the Docker internal network.
+                Use authentication (requirepass directive in Redis) to ensure only legitimate clients can access Redis.
+        sqli:
+            An attacker could impersonate the application server (if it were publicly exposed) to steal sensitive information.
+            Possible Mitigations:
+                Use application-level authentication for any HTTP services exposed (e.g., via OAuth, API keys).
+                Restrict access to the app service based on IP whitelisting if it's used internally.
+    Tampering
+        Postgres:
+            Database records could be tampered with if the attacker gains access to the Postgres instance (e.g., SQL injection, direct access).
+            Possible Mitigations:
+                Use parameterized queries and prepared statements to prevent SQL injection.
+                Use encryption (at rest and in transit) for sensitive data.
+        Redis:
+            An attacker could tamper with the data stored in Redis (e.g., modifying or deleting cached data).
+            Possible Mitigations:
+                Use Redis's built-in authentication.
+                Enable persistence and encryption if Redis is storing critical data.
+        sqli:
+            The application could be tampered with through malicious code injection (e.g., XSS, SQLi, etc.).
+            Possible Mitigations:
+                Sanitize and validate inputs properly to prevent code injection attacks.
+                Use a Web Application Firewall (WAF) to detect and block malicious traffic.
+    Repudiation 
+        Postgres:
+            If proper logging isn't set up, attackers could perform actions (e.g., SQL injections or unauthorized access) and later deny them.
+            Possible Mitigations:
+                Enable detailed database query logging.
+                Use a centralized logging solution (e.g., ELK stack) to collect logs from the database and application.
+        Redis:
+            Similar to Postgres, if Redis logging is not enabled, attackers could deny actions taken within Redis (e.g., modifying or deleting keys).
+            Possible Mitigations:
+                Enable Redis logging and monitoring.
+                Set up alerting for any suspicious activity, such as unauthorized access.
+        sqli:
+            The application could fail to log malicious requests or actions, allowing attackers to deny performing certain actions (e.g., input validation bypass).
+            Possible Mitigations:
+                Implement detailed access and error logging.
+                Use a logging service to monitor for unusual application activity.
+    Information Disclosure 
+        Postgres:
+            Database might leak sensitive data (e.g., passwords, user data, etc.) if not properly secured.
+            Possible Mitigations:
+                Use encryption (SSL/TLS) for data in transit and at rest.
+                Ensure database authentication (usernames, passwords) is properly implemented.
+        Redis:
+            Redis stores temporary data, which might leak sensitive information if not encrypted or access-controlled.
+            Possible Mitigations:
+                Use encryption for Redis data and ensure proper access control.
+                Avoid storing sensitive data in Redis; use it only for non-sensitive caching.
+        sqli:
+            The app might accidentally expose sensitive data in error messages, logs, or through weak access controls.
+            Possible Mitigations:
+                Always sanitize and sanitize output to avoid disclosing sensitive information in error messages.
+                Ensure that API responses contain only necessary data and avoid exposing database fields that should be kept private.
+    Denial of Service
+        Postgres:
+            An attacker could try to overwhelm the Postgres service with large queries or a DDoS attack.
+            Possible Mitigations:
+                Set up query timeouts and rate limiting on database queries.
+                Use firewalls to restrict access to the database from untrusted sources.
+        Redis:
+            Redis could be overwhelmed by excessive write or read requests (leading to high memory or CPU usage).
+            Possible Mitigations:
+                Set up rate limiting on Redis commands.
+                Use Redis' built-in persistence for handling potential data loss.
+        sqli:
+            An attacker could flood the Flask application with requests (DoS or DDoS).
+            Possible Mitigations:
+                Implement rate limiting and request throttling in the application.
+                Use a web application firewall (WAF) to mitigate DDoS attacks.
+    Elevation of Privilege 
+        Postgres:
+            An attacker could exploit vulnerabilities in the Postgres database to gain higher privileges.
+            Possible Mitigations:
+                Apply the principle of least privilege (PoLP) by creating specific database roles with limited access.
+                Regularly patch and update Postgres to avoid privilege escalation vulnerabilities.
+        Redis:
+            An attacker could exploit Redis vulnerabilities to escalate privileges within the container.
+            Possible Mitigations:
+                Limit Redis access to trusted IPs.
+                Disable commands that allow changes to Redis' configuration or privileged commands.
+        sqli:
+            The app might have misconfigured authentication or authorization, allowing an attacker to escalate their privileges.
+            Possible Mitigations:
+                Implement strong access control and authorization policies (e.g., RBAC, OAuth).
+                Regularly audit and test for privilege escalation vulnerabilities.
+===============================================================================================================================================================                
+Kubernetes Infrastructure Threats:
+    Spoofing (Impersonation or faking an identity)
+        Control Plane:
+            Attackers might impersonate the API server, controller, or scheduler to gain unauthorized access or control over the cluster.
+            Mitigation: Use TLS encryption and client certificate authentication for control plane components.
+        etcd:
+            An attacker might try to spoof etcd by impersonating it or gaining unauthorized access to sensitive cluster state data.
+            Mitigation: Use mutual TLS authentication between the control plane and etcd, and configure strict access control lists (ACLs).
+        Ingress Controller:
+            Attackers could spoof the Ingress controller or load balancer, redirecting traffic to a malicious endpoint.
+            Mitigation: Use TLS encryption for communication, limit access to only authorized IPs, and authenticate the ingress controller via Kubernetes secrets.
+        Worker Nodes:
+            Attackers could spoof worker nodes to gain unauthorized access to the pods or services running on them.
+            Mitigation: Implement proper node authentication and secure communication channels between nodes using TLS.
+    Tampering (Modifying data or resources)
+        Control Plane:
+            Kubelet, kube-proxy, and other control plane components might be tampered with by attackers to disrupt the scheduling of pods or network policies.
+            Mitigation: Ensure proper role-based access control (RBAC) and use Kubernetes Audit logs to track tampering.
+        etcd:
+            Attackers could tamper with the stored cluster data, like configurations and secrets, leading to incorrect cluster states or data leaks.
+            Mitigation: Enable encryption for data at rest in etcd, and ensure proper authentication and access controls to prevent unauthorized access.
+        Worker Nodes:
+            An attacker could modify the configuration of running containers or pods, causing malfunctions or security vulnerabilities.
+            Mitigation: Use PodSecurityPolicies (if supported), enforce strict network policies, and monitor containers for unauthorized changes.
+        Ingress Controller:
+            An attacker could tamper with the ingress controller configuration, manipulating traffic routing and exposing vulnerable services.
+            Mitigation: Use Helm or Kubernetes manifests for version-controlled ingress controller configurations, enforce RBAC, and ensure monitoring.
+    Repudiation (Denial of actions or logs)
+        Control Plane:
+            Lack of proper logging and monitoring could allow attackers to perform actions (e.g., modifying configurations) and later deny those actions.
+            Mitigation: Enable audit logging in Kubernetes for control plane components. Use centralized logging systems (e.g., ELK stack) for all cluster actions.
+        etcd:
+            Failure to properly log access to etcd might allow attackers to deny unauthorized modifications.
+            Mitigation: Enable detailed logging for etcd access and ensure all actions are properly tracked.
+        Worker Nodes:
+            Containers on worker nodes might not have sufficient logging, allowing attackers to deny actions that caused disruption (e.g., deleting pods, changing configurations).
+            Mitigation: Implement log forwarding (e.g., using Fluentd, Logstash) to ensure that container logs are collected and accessible.
+        Ingress Controller:
+            An attacker could prevent or modify logs in the ingress controller to hide traffic redirections.
+            Mitigation: Implement logging at the ingress level and enforce proper logging configurations in Kubernetes.
+    Information Disclosure (Exposing sensitive data)
+        Control Plane:
+            Sensitive data (such as secrets, certificates, etc.) could be leaked due to misconfiguration or vulnerabilities.
+            Mitigation: Use Kubernetes Secrets for managing sensitive data, encrypt secrets at rest, and enforce strict access controls.
+        etcd:
+            If etcd is not properly secured, it could expose sensitive cluster state information, such as configurations, secrets, and authentication data.
+            Mitigation: Encrypt etcd data at rest and ensure only authorized control plane components can access etcd.
+        Worker Nodes:
+            Sensitive application data could be exposed through improperly configured network policies or vulnerabilities in containers.
+            Mitigation: Apply NetworkPolicies to isolate application containers, and ensure encryption for data in transit.
+        Ingress Controller:
+            Exposing an Ingress controller to the public internet without proper security measures might lead to leakage of internal service details.
+            Mitigation: Implement HTTPS (TLS), use authentication, and limit access to the ingress controller via firewalls and IP whitelisting.
+    Denial of Service (Interrupting service or overwhelming resources)
+        Control Plane:
+            Attackers could overload the API server, scheduler, or controller manager by flooding the control plane with requests, leading to degraded performance or outages.
+            Mitigation: Use rate-limiting for API requests, configure horizontal pod autoscaling for control plane components, and enable resilience testing.
+        etcd:
+            Overloading etcd with too many read/write requests could cause it to become unresponsive, affecting the entire cluster.
+            Mitigation: Limit access to etcd and use rate-limiting or Quotas to prevent excessive load.
+        Worker Nodes:
+            An attacker could flood worker nodes with resource-hogging requests, causing performance degradation or pod evictions.
+            Mitigation: Use resource limits and requests for each pod to prevent resource exhaustion.
+        Ingress Controller:
+            The Ingress controller could be targeted by DDoS attacks, leading to service outages or data exposure.
+            Mitigation: Use rate-limiting and firewall rules to protect ingress controllers, and deploy DDoS protection mechanisms.
+    Elevation of Privilege (Gaining higher access than intended)
+        Control Plane:
+            An attacker could exploit misconfigurations in RBAC to gain elevated privileges and control the cluster.
+            Mitigation: Regularly audit RBAC policies, use least privilege access, and apply the PodSecurityPolicy and NetworkPolicy for containers.
+        etcd:
+            An attacker could exploit vulnerabilities or misconfigurations in etcd access control to escalate privileges and gain control over sensitive data.
+            Mitigation: Use strong authentication and authorization policies, implement role-based access for etcd users, and apply RBAC.
+        Worker Nodes:
+            Exploiting a vulnerability in the node's kubelet or container runtime could allow an attacker to escalate privileges on the node.
+            Mitigation: Apply security patches, enable node-level security policies, and enforce privilege escalation prevention via pod security settings.
+        Ingress Controller:
+            Exploiting a vulnerability in the ingress controller might allow an attacker to gain control over traffic routing or back-end services.
+            Mitigation: Regularly patch and secure the ingress controller, use authentication, and apply the least privilege principle for service accounts.
+===============================================================================================================================================================                
+Docker-bench Run Results and Analysis
+ grep FAIL initial-_-docker-bench.txt 
+[FAIL] 1.1.1 Ensure a separate partition for containers has been created (Manual)
+[FAIL] 1.1.3 Ensure auditing is configured for the docker daemon (Automated)
+[FAIL] 1.1.4 Ensure auditing is configured for Docker files and directories - /run/containerd (Automated)
+[FAIL] 1.1.5 Ensure auditing is configured for Docker files and directories - /var/lib/docker (Manual)
+[FAIL] 1.1.6 Ensure auditing is configured for Docker files and directories - /etc/docker (Automated)
+[FAIL] 1.1.7 Ensure auditing is configured for Docker files and directories - docker.service (Automated)
+[FAIL] 1.1.8 Ensure auditing is configured for Docker files and directories - containerd.sock (Automated)
+[FAIL] 1.1.9 Ensure auditing is configured for Docker files and directories - docker.socket (Automated)
+[FAIL] 1.1.10 Ensure auditing is configured for Docker files and directories - /etc/default/docker (Automated)
+[FAIL] 1.1.11 Ensure auditing is configured for Docker files and directories - /etc/docker/daemon.json (Automated)
+[FAIL] 1.1.12 Ensure auditing is configured for Docker files and directories - /etc/containerd/config.toml (Automated)
+[FAIL] 1.1.14 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd (Automated)
+[FAIL] 1.1.15 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim (Manual)
+[FAIL] 1.1.16 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v1 (Automated)
+[FAIL] 1.1.17 Ensure auditing is configured for Docker files and directories - /usr/bin/containerd-shim-runc-v2 (Manual)
+[FAIL] 1.1.18 Ensure auditing is configured for Docker files and directories - /usr/bin/runc (Manual)
+[FAIL] 2.2 Ensure network traffic is restricted between containers on the default bridge (Manual)
+[FAIL] 2.7 Ensure TLS authentication for Docker daemon is configured (Manual)
+[FAIL] 2.9 Enable user namespace support (Manual)
+[FAIL] 2.14 Ensure containers are restricted from acquiring new privileges (Manual)
+[FAIL] 2.15 Ensure live restore is Enabled (Manual)
+[FAIL] 2.16 Ensure Userland Proxy is Disabled (Manual)
+[FAIL] 3.7 Ensure that registry certificate file ownership is set to root:root (Automated)
+[FAIL] 3.8 Ensure that registry certificate file permissions are set to 444 or more restrictive (Automated)
+[FAIL] 3.17 Ensure that the daemon.json file ownership is set to root:root (Manual)
+[FAIL] 3.18 Ensure that daemon.json file permissions are set to 644 or more restrictive (Manual)
+[FAIL] 3.20 Ensure that /etc/sysconfig/docker file permissions are set to 644 or more restrictive (Manual)
+[FAIL] 3.21 Ensure that the /etc/sysconfig/docker file ownership is set to root:root (Manual)
+[FAIL] 4.1 Ensure that a user for the container has been created (Manual)
+[FAIL] 4.5 Ensure Content trust for Docker is Enabled (Manual)
+[FAIL] 5.11 Ensure that the memory usage for container is limited (Manual)
+[FAIL] 5.12 Ensure that CPU priority is set appropriately on container (Manual)
+[FAIL] 5.12 Ensure that the container's root filesystem is mounted as read only (Manual)
+[FAIL] 5.14 Ensure that incoming container traffic is bound to a specific host interface (Manual)
+[FAIL] 5.15 Ensure that the 'on-failure' container restart policy is set to '5' (Manual)
+[FAIL] 5.24 Ensure that docker exec commands are not used with the user=root option (Manual)
+[FAIL] 5.26 Ensure that the container is restricted from acquiring additional privileges (Manual)
+[FAIL] 5.29 Ensure that the PIDs cgroup limit is used (Automated)
+38 checks FAIL

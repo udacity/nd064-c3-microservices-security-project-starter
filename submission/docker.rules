@@ -1,0 +1,29 @@
+# Audit rules for Docker directories
+-w /var/lib/docker -p wa -k docker
+-w /etc/docker -p wa -k docker
+-w /usr/bin/docker -p x -k docker
+-w /run/containerd -p wa -k docker
+-w /docker -p wa -k docker
+
+# Audit rules for Docker binaries and services
+-w /lib/systemd/system/docker.service -p wa -k docker
+-w /etc/systemd/system/docker.service -p wa -k docker
+-w /usr/bin/containerd -p wa -k docker
+-w /usr/bin/containerd-shim -p wa -k docker
+-w /usr/bin/containerd-shim-runc-v1 -p wa -k docker
+-w /usr/bin/containerd-shim-runc-v2 -p wa -k docker
+-w /usr/bin/runc -p wa -k docker
+-w /etc/containerd/config.toml -p wa -k docker
+
+# Audit Docker socket
+-w /run/docker.sock -p wa -k docker
+-w /run/containerd/containerd.sock -p wa -k docker
+
+
+# Audit Docker service files (Debian path)
+-w /etc/systemd/system/multi-user.target.wants/docker.service -p wa -k docker
+
+# Audit the Docker daemon config (Debian paths)
+-w /etc/default/docker -p wa -k docker
+-w /etc/docker/daemon.json -p wa -k docker
+

@@ -68,28 +68,21 @@ do_100() {
         mv ~/.ssh/known_hosts ~/.ssh/known_hosts.$(date +%Y%m%d_%H%M%S)
     fi
 
-    rke --version
+    curl -LO https://github.com/rancher/rke/releases/download/v1.4.10/rke_linux-amd64
+    chmod +x rke_linux-amd64
+    sudo mv rke_linux-amd64 /usr/local/bin/rke
     line
 
 }
 
 do_200() {
-    vagrant up 2>&1 | tee vagrant_up.log
+    echo "Execute ssh-copy-id"; 
 
-    line
-    echo "Vagrant is up"
-    echo "\n\n\nHost credentials: $USER_HOST : $PASS_HOST"; 
-    echo "Vagrant: $IP_VAGRANT $USER_VAGRANT : $PASS_VAGRANT"; 
-
-    echo "Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine'\''s admin password, [$PASS_HOST] . The second password is the Node'\''s password, [$PASS_VAGRANT]."; 
-
-    echo "Use password: $PASS_HOST for Host"
-    echo "Use password: $PASS_VAGRANT for Vagrant"
-    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER_VAGRANT@$IP_VAGRANT
+    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@192.168.2.153
     sleep 10
-    echo "SSH key copied to Vagrant.\n\n"
+    echo "SSH key copied to 192.168.2.153."
     line
-    rke up --ignore-docker-version --config cluster.yml
+    rke up --ignore-docker-version --config $PROJECT_DIR/cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
     line
     kubectl --kubeconfig kube_config_cluster.yml get nodes
@@ -100,21 +93,16 @@ do_200() {
 
     line
     echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
-    echo "Use password: $PASS_VAGRANT for Vagrant if needed"
-    echo "Execute the following commands:\n\n
-          ssh $USER_VAGRANT@$IP_VAGRANT
-          docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -ti rancher/security-scan:v0.2.2 bash
-          kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened
-          kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-permissive
-          "
+    ssh root@192.168.2.153 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened"' > $SUBMISSION/kube-bench-after_install_results.txt
     read -p "Press enter to continue"
 }
 
 do_300() {
-    # sudo zypper addrepo https://download.opensuse.org/repositories/devel:/languages:/go/15.4/devel:languages:go.repo
-    sudo zypper --non-interactive refresh
-    # sudo zypper install go1.19
-    sudo zypper --non-interactive in go go-doc
+    sudo apt install -y auditd audispd-plugins # requirement for docker-bench
+    sudo systemctl enable auditd
+    sudo systemctl start auditd
+    # sudo apt-get update
+    sudo apt-get install golang -y
     go version
     go env | grep GOENV
 
@@ -122,9 +110,11 @@ do_300() {
     cd /usr/local/bin/
     sudo chmod +x docker-compose
 
-    python3 -m pip install icdiff
+    echo "Install: 
+    python3 -m pip install icdiff"
+    read -p "Press enter to continue"
 
-    sudo zypper --non-interactive in sqlite3
+    sudo apt-get install sqlite3 -y
     sqlite3 --version
 
     sudo curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
@@ -145,6 +135,15 @@ do_300() {
         cd $PROJECT_DIR
     fi
     echo "Kube-bench is installed after RKE is up"
+
+    # Add Helm repo and update it
+    curl https://get.helm.sh/helm-v3.9.1-linux-amd64.tar.gz -o helm-v3.9.1-linux-amd64.tar.gz
+    tar -zxvf helm-v3.9.1-linux-amd64.tar.gz
+    sudo mv linux-amd64/helm /usr/local/bin/helm
+
+    # Verify Helm installation
+    helm version
+
 }
 
 # Function to capture version information and configurations
@@ -169,8 +168,7 @@ do_1000() {
     cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
 
     echo "Kube-bench configuration:" >> $SUMMARY_FILE
-    "ssh $USER_VAGRANT@$IP_VAGRANT -t "docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro -t rancher/security-scan:v0.2.2 bash" && \
-    cat /etc/kube-bench/cfg/kube-bench-config.yaml " >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
+    ssh root@192.168.2.153 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "cat /etc/kube-bench/cfg/kube-bench-config.yaml"' >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
 
     echo "=============================" >> $SUMMARY_FILE
     cat $SUMMARY_FILE
@@ -182,3 +180,14 @@ run do_200 do_200
 run do_300 do_300
 run do_1000 do_1000
 echo "=== Environment setup completed ==="
+
+
+echo "=== Manual steps on the kubernetes host ==="
+echo -e "
+sudo apt update
+sudo apt install -y git curl jq
+curl -LO https://github.com/aquasecurity/kube-bench/releases/download/v0.10.6/kube-bench_0.10.6_linux_amd64.deb
+dpkg -i kube-bench_0.10.6_linux_amd64.deb
+apt-get install -f
+"
+
