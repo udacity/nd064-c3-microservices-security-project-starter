@@ -1,3 +1,6 @@
+#!/bin/bash
+
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/00_init.sh"
 
 
 mkdir -p /etc/docker/certs

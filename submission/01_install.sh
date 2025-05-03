@@ -3,23 +3,14 @@
 # This script is designed to initalize an environment for running security tests on a microservices project.
 # It sets up Docker, Vagrant, and various security tools, and runs commands to prepare the environment.
 
-set -e
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/00_init.sh"
+
 START_FROM="${1:-all}"   # Default to 'all' if no argument
 RUN=false
 
-export SUBMISSION=~/nd064-c3-microservices-security-project-starter/submission
-export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
-export USER_HOST="udacity"
-export PASS_HOST="UdacityRocks.1!!"
-export USER_VAGRANT="root"
-export PASS_VAGRANT="vagrant"
-export IP_VAGRANT="192.168.50.101"
+
 
 DOCKER_IMAGE="varsanyim/nd064-c3-microservices-security-project-starter:$TYPE"
-
-line() {
-    echo "================================================================================"
-}
 
 run() {
     local section="$1"
@@ -78,22 +69,27 @@ do_100() {
 do_200() {
     echo "Execute ssh-copy-id"; 
 
-    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@192.168.2.153
+    ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@$K8S_IP
     sleep 10
-    echo "SSH key copied to 192.168.2.153."
+    echo "SSH key copied to $K8S_IP."
     line
     rke up --ignore-docker-version --config $PROJECT_DIR/cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
     line
     kubectl --kubeconfig kube_config_cluster.yml get nodes
     kubectl --kubeconfig kube_config_cluster.yml get pods -A
-    docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
-    docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
-    docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
+    # docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
+    # docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
+    # docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
 
     line
-    echo "Clone & install kube-bench (quit from DOCKER AND VAGRANT after finishing)"
-    ssh root@192.168.2.153 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened"' > $SUBMISSION/kube-bench-after_install_results.txt
+    # echo "Install & run kube-bench as docker"
+    # ssh root@$K8S_IP 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.6-hardened"' > $SUBMISSION/kube-bench-after_install_results.txt
+    echo "Install kube-bench"
+    ssh root@$K8S_IP 'sudo apt update; sudo apt install -y git curl jq && \
+        curl -LO https://github.com/aquasecurity/kube-bench/releases/download/v0.10.6/kube-bench_0.10.6_linux_amd64.deb && \
+        dpkg -i kube-bench_0.10.6_linux_amd64.deb && \
+        apt-get install -f'
     read -p "Press enter to continue"
 }
 
@@ -112,7 +108,7 @@ do_300() {
 
     echo "Install: 
     python3 -m pip install icdiff"
-    read -p "Press enter to continue"
+    read -p "Execute manually in a Python venc, and then press enter to continue"
 
     sudo apt-get install sqlite3 -y
     sqlite3 --version
@@ -168,7 +164,7 @@ do_1000() {
     cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
 
     echo "Kube-bench configuration:" >> $SUMMARY_FILE
-    ssh root@192.168.2.153 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "cat /etc/kube-bench/cfg/kube-bench-config.yaml"' >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
+    ssh root@$K8S_IP 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "cat /etc/kube-bench/cfg/kube-bench-config.yaml"' >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
 
     echo "=============================" >> $SUMMARY_FILE
     cat $SUMMARY_FILE
@@ -181,13 +177,4 @@ run do_300 do_300
 run do_1000 do_1000
 echo "=== Environment setup completed ==="
 
-
-echo "=== Manual steps on the kubernetes host ==="
-echo -e "
-sudo apt update
-sudo apt install -y git curl jq
-curl -LO https://github.com/aquasecurity/kube-bench/releases/download/v0.10.6/kube-bench_0.10.6_linux_amd64.deb
-dpkg -i kube-bench_0.10.6_linux_amd64.deb
-apt-get install -f
-"
 

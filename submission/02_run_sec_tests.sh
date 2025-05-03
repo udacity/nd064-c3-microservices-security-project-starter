@@ -6,16 +6,9 @@
 # - Kubernetes cluster
 # - flask app
 
-# Exit on any error
-set -e
 
-export SUBMISSION=~/nd064-c3-microservices-security-project-starter/submission
-export PROJECT_DIR=~/nd064-c3-microservices-security-project-starter/starter
-# USER_HOST="udacity"
-# PASS_HOST="UdacityRocks.1!!"
-# USER_VAGRANT="root"
-# PASS_VAGRANT="vagrant"
-# IP_VAGRANT="192.168.50.101"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/00_init.sh"
+
 
 DOCKER_IMAGE_initial=~/nd064-c3-microservices-security-project-starter/vuln_app/
 DOCKER_IMAGE_hardened="$SUBMISSION/app"
@@ -57,7 +50,7 @@ do_scan() {
     echo "============================================================================="
     echo "Running Kube-bench security scan..."
     echo "============================================================================="
-    ssh root@192.168.2.153 'kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.24' > $SUBMISSION/$TYPE-_-kube-bench.txt
+    ssh root@$K8S_IP 'kube-bench run --targets etcd,master,controlplane,policies --scored --config-dir=/etc/kube-bench/cfg --benchmark rke-cis-1.24' > $SUBMISSION/$TYPE-_-kube-bench.txt
     echo "Kube-bench results saved to $SUBMISSION/$TYPE-_-kube-bench.txt"
     echo "Check for failed findings in the results."
 
@@ -104,8 +97,7 @@ while true; do
     esac
 done
 
-exit
-
+echo "============================================================================="
 # Create a mock incident response report based on your test results
 echo "Creating mock incident response report..."
 cat <<EOF > $SUBMISSION/incident_response_report.txt
