@@ -24,10 +24,96 @@ Vulnerability DB:
   DownloadedAt: 2025-04-27 20:59:52.28647427 +0000 UTC
 SQLite3 version: 3.40.1 2022-12-28 14:03:47 df5c253c0b3dd24916e4ec7cf77d3db5294cc9fd45ae7b9c5e82ad8197f3alt1
 RKE version: rke version v1.8.2
-Kube-bench version: 
+Kube-bench version: 0.10.6
 =============================
 Docker configuration:
 No Docker daemon.json configuration
+Kube-bench configuration:
+No Kube-bench configuration
+=============================
+=== Capturing version information and configurations ===
+Environment setup on Sun May  4 12:12:08 AM CEST 2025
+=============================
+Docker version: Docker version 28.0.4, build b8034c0
+Docker Compose version: Docker Compose version v2.12.2
+Go version: go version go1.19.8 linux/amd64
+Syft version: syft 1.23.1
+Grype version: Application:         grype
+Version:             0.91.2
+BuildDate:           2025-04-25T17:20:02Z
+GitCommit:           7e6ba817350bdb922f35e4437aa01869cf0a8be0
+GitDescription:      v0.91.2
+Platform:            linux/amd64
+GoVersion:           go1.24.2
+Compiler:            gc
+Syft Version:        v1.23.1
+Supported DB Schema: 6
+Trivy version: Version: 0.18.3
+Vulnerability DB:
+  Type: Light
+  Version: 1
+  UpdatedAt: 2023-02-08 12:48:16.989777838 +0000 UTC
+  NextUpdate: 2023-02-08 18:48:16.989777438 +0000 UTC
+  DownloadedAt: 2025-05-02 15:11:10.046257111 +0000 UTC
+SQLite3 version: 3.40.1 2022-12-28 14:03:47 df5c253c0b3dd24916e4ec7cf77d3db5294cc9fd45ae7b9c5e82ad8197f3alt1
+RKE version: rke version v1.4.10
+Kube-bench version: 
+=============================
+Docker configuration:
+{
+  "data-root": "/docker",
+  "tlsverify": true,
+  "tlscacert": "/etc/docker/certs/ca.pem",
+  "tlscert": "/etc/docker/certs/server-cert.pem",
+  "tlskey": "/etc/docker/certs/server-key.pem",
+  "userns-remap": "default",
+  "live-restore": true,
+  "userland-proxy": false
+}
+
+Kube-bench configuration:
+No Kube-bench configuration
+=============================
+=== Capturing version information and configurations ===
+Environment setup on Sun May  4 03:18:49 PM CEST 2025
+=============================
+Docker version: Docker version 28.0.4, build b8034c0
+Docker Compose version: Docker Compose version v2.12.2
+Go version: go version go1.19.8 linux/amd64
+Syft version: syft 1.23.1
+Grype version: Application:         grype
+Version:             0.91.2
+BuildDate:           2025-04-25T17:20:02Z
+GitCommit:           7e6ba817350bdb922f35e4437aa01869cf0a8be0
+GitDescription:      v0.91.2
+Platform:            linux/amd64
+GoVersion:           go1.24.2
+Compiler:            gc
+Syft Version:        v1.23.1
+Supported DB Schema: 6
+Trivy version: Version: 0.18.3
+Vulnerability DB:
+  Type: Light
+  Version: 1
+  UpdatedAt: 2023-02-08 12:48:16.989777838 +0000 UTC
+  NextUpdate: 2023-02-08 18:48:16.989777438 +0000 UTC
+  DownloadedAt: 2025-05-02 15:11:10.046257111 +0000 UTC
+SQLite3 version: 3.40.1 2022-12-28 14:03:47 df5c253c0b3dd24916e4ec7cf77d3db5294cc9fd45ae7b9c5e82ad8197f3alt1
+RKE version: rke version v1.4.10
+Kube-bench version: 0.10.6
+=============================
+Docker configuration:
+{
+  "data-root": "/docker",
+  "tlsverify": true,
+  "tlscacert": "/etc/docker/certs/ca.pem",
+  "tlscert": "/etc/docker/certs/server-cert.pem",
+  "tlskey": "/etc/docker/certs/server-key.pem",
+  "userns-remap": "default",
+  "live-restore": true,
+  "userland-proxy": false
+}
+
 Kube-bench configuration:
 No Kube-bench configuration
 =============================

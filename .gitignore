@@ -6,3 +6,4 @@ __pycache__/
 **/.DS_Sto
 cluster.rkestate
 .venv/
+submission/hardened_cluster.rkestate

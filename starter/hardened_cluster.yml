@@ -1,0 +1,78 @@
+# RKE cluster.yaml - updated to address CIS benchmarks and API server bind
+nodes:
+  - address: 192.168.2.155
+    port: "22"
+    internal_address: 192.168.2.155
+    role:
+      - controlplane
+      - etcd
+      - worker
+    hostname_override: node1
+    user: root
+    docker_socket: /var/run/docker.sock
+    ssh_key_path: ~/.ssh/id_rsa
+    labels: {}
+    taints: []
+
+services:
+  etcd:
+    snapshot: true
+    retention: "24h"
+    creation: "6h"
+
+  kube-api:
+    service_cluster_ip_range: 10.43.0.0/16
+    pod_security_policy: false
+    extra_args:
+      kubelet-certificate-authority: "/etc/kubernetes/ssl/kube-ca.pem"
+      enable-admission-plugins: "EventRateLimit,AlwaysPullImages"
+      encryption-provider-config: "/etc/kubernetes/ssl/encryption-config.yaml"
+      bind-address: "0.0.0.0"
+    extra_binds:
+      - "/etc/kubernetes/ssl/encryption-config.yaml:/etc/kubernetes/ssl/encryption-config.yaml"
+
+  kube-controller:
+    cluster_cidr: 10.42.0.0/16
+    service_cluster_ip_range: 10.43.0.0/16
+    extra_args:
+      terminated-pod-gc-threshold: "10"
+      profiling: "false"
+      use-service-account-credentials: "true"
+      service-account-private-key-file: "/etc/kubernetes/ssl/kube-service-account-token-key.pem"
+      root-ca-file: "/etc/kubernetes/ssl/kube-ca.pem"
+      bind-address: "127.0.0.1"
+
+  scheduler:
+    extra_args:
+      profiling: "false"
+      bind-address: "127.0.0.1"
+
+  kubelet:
+    cluster_domain: cluster.local
+    cluster_dns_server: 10.43.0.10
+    fail_swap_on: false
+
+  kubeproxy: {}
+
+network:
+  plugin: canal
+
+authentication:
+  strategy: x509
+
+authorization:
+  mode: rbac
+
+ingress:
+  provider: nginx
+
+ssh_agent_auth: false
+
+addons: |
+  ---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: production
+    labels:
+      pod-security.kubernetes.io/enforce: restricted

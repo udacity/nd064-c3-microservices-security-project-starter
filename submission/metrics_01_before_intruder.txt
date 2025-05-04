@@ -1,0 +1,4 @@
+Falco Exporter Metrics for falco events: 
+falco_events{hostname="node1",k8s_ns_name="<NA>",k8s_pod_name="<NA>",priority="5",rule="Contact K8S API Server From Container",source="syscall",tags=",T1565,container,k8s,maturity_stable,mitre_discovery,network,"} 291
+Prometheus Metrics for falco events: 
+Contact K8S API Server From Container	291

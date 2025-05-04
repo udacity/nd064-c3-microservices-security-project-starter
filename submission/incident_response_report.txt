@@ -1,0 +1,39 @@
+1. Incident commander name: 
+    Martina Wille
+2. Executive Summary of what happened: 
+    Unauthorized cryptocurrency mining pods (moneropool, minergate, cryptotonight) 
+    were deployed in the cluster, utilizing system resources for mining Monero. 
+    The pods were identified as potentially malicious and were running without 
+    authorization.
+3. Summary of what was affected: 
+    The Kubernetes cluster's CPU and network resources were impacted by the mining 
+    processes. This led to a potential degradation in performance and increased 
+    resource consumption.
+4. Summmry of the impact: 
+    CPU Utilization: Increased due to the mining activities.
+    Cluster Performance: Reduced performance due to resources being hijacked for mining.
+    Security: Possible compromise of the Kubernetes cluster by unauthorized workloads.
+    Compliance: Potential violations of organization security policies and resource usage rules.
+5. Summary of the remediation steps: 
+    kubectl --kubeconfig /home/chris/nd064-c3-microservices-security-project-starter/starter/kube_config_cluster.yml delete pod moneropool
+    kubectl --kubeconfig /home/chris/nd064-c3-microservices-security-project-starter/starter/kube_config_cluster.yml delete pod minergate
+    kubectl --kubeconfig /home/chris/nd064-c3-microservices-security-project-starter/starter/kube_config_cluster.yml delete pod cryptotonight
+    * Inspect logs to determine how these pods were deployed and whether they 
+      were part of a larger attack.
+    * Review the cluster’s security policies and network settings to prevent 
+      future unauthorized deployments.
+    * Investigate any potential security breaches related to credentials or 
+      access control.
+6. Summary of lessons learned: 
+    Pod Deployment Control: 
+        Ensure that only authorized workloads are deployed on the Kubernetes 
+        cluster by enforcing strict RBAC policies.
+    Monitoring: 
+        Implement proactive monitoring using tools like Falco, which can detect 
+        unauthorized workloads or suspicious behavior.
+    Audit Trails: 
+        Maintain logs and audit trails of all cluster activity to quickly 
+        identify unauthorized actions.
+    Network Segmentation: 
+        Isolate sensitive resources to prevent exploitation by unauthorized workloads.
+

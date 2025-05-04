@@ -73,11 +73,15 @@ do_200() {
     sleep 10
     echo "SSH key copied to $K8S_IP."
     line
+    echo "Install Docker on K8S host"
+    ssh root@$K8S_IP 'sudo apt update && sudo apt install -y docker.io; sudo usermod -aG docker root; 
+        sudo systemctl start docker; sudo systemctl enable docker'
+    echo "rke up"
     rke up --ignore-docker-version --config $PROJECT_DIR/cluster.yml
     echo "RKE is up! Check the logs and Continuing with setup..."
     line
-    kubectl --kubeconfig kube_config_cluster.yml get nodes
-    kubectl --kubeconfig kube_config_cluster.yml get pods -A
+    kubectl $K get nodes
+    kubectl $K get pods -A
     # docker build -t varsanyim/nd064-c3-microservices-security-project-starter:latest . --no-cache=true
     # docker push varsanyim/nd064-c3-microservices-security-project-starter:latest
     # docker tag varsanyim/nd064-c3-microservices-security-project-starter:latest varsanyim/nd064-c3-microservices-security-project-starter:not_hardened
@@ -157,14 +161,14 @@ do_1000() {
     echo "Trivy version: $(trivy --version)" >> $SUMMARY_FILE
     echo "SQLite3 version: $(sqlite3 --version)" >> $SUMMARY_FILE
     echo "RKE version: $(rke --version)" >> $SUMMARY_FILE
-    echo "Kube-bench version: $(kube-bench --version)" >> $SUMMARY_FILE
+    echo "Kube-bench version: $(ssh root@$K8S_IP 'kube-bench version')" >> $SUMMARY_FILE
     echo "=============================" >> $SUMMARY_FILE
 
     echo "Docker configuration:" >> $SUMMARY_FILE
     cat /etc/docker/daemon.json >> $SUMMARY_FILE || echo "No Docker daemon.json configuration" >> $SUMMARY_FILE
 
     echo "Kube-bench configuration:" >> $SUMMARY_FILE
-    ssh root@$K8S_IP 'docker run --pid=host -v /etc:/node/etc:ro -v /var:/node/var:ro rancher/security-scan:v0.2.2 bash -c "cat /etc/kube-bench/cfg/kube-bench-config.yaml"' >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
+    ssh root@$K8S_IP 'cat /etc/kube-bench/cfg/kube-bench-config.yaml' >> $SUMMARY_FILE || echo "No Kube-bench configuration" >> $SUMMARY_FILE
 
     echo "=============================" >> $SUMMARY_FILE
     cat $SUMMARY_FILE

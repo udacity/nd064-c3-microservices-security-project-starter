@@ -1,3 +1,0 @@
-Host credentials: udacity : UdacityRocks.1!!
-Vagrant: 192.168.50.101 root : vagrant
-Execute ssh-copy-id: Provide two different passwords when prompted. The first password is the host machine's admin password, [UdacityRocks.1!!] . The second password is the Node's password, [vagrant].

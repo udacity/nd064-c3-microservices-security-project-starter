@@ -97,21 +97,6 @@ while true; do
     esac
 done
 
-echo "============================================================================="
-# Create a mock incident response report based on your test results
-echo "Creating mock incident response report..."
-cat <<EOF > $SUBMISSION/incident_response_report.txt
-1. Incident commander name: Martina Wille
-2. Executive Summary of what happened: A security event was triggered due to XSS in Flask app. An attacker exploited a vulnerability in the Flask app.
-3. Summary of what was affected: The user data was exposed.
-4. Summmry of the impact: The exposure led to potential data leaks.
-5. Summary of the remediation steps: Fixed XSS, patched vulnerable libraries.
-6. Summary of lessons learned: Always validate user input and review libraries in pipelines.
-
-
-EOF
-echo "Incident response report saved to $SUBMISSION/incident_response_report.txt"
-
 
 echo "Script completed."
 

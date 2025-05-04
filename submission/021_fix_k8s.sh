@@ -3,7 +3,7 @@
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/00_init.sh"
 
 
-scp -i ~/.ssh/id_rsa $SUBMISSION/encryption-config.yaml root@1$K8S_IP:/etc/kubernetes/ssl/encryption-config.yaml
+scp -i ~/.ssh/id_rsa $SUBMISSION/encryption-config.yaml root@$K8S_IP:/etc/kubernetes/ssl/encryption-config.yaml
 
 ssh root@$K8S_IP '
 set -e  # Exit on any error

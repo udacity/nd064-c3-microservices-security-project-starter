@@ -1,0 +1,16 @@
+NAMESPACE       NAME                                                     READY   STATUS      RESTARTS      AGE
+falco           pod/falco-6zk5k                                          2/2     Running     2 (19m ago)   164m
+falco           pod/falco-falcosidekick-65db95d9cc-tbp7p                 1/1     Running     2 (19m ago)   164m
+falco           pod/falco-falcosidekick-65db95d9cc-xrc92                 1/1     Running     2 (19m ago)   164m
+monitoring      pod/falco-exporter-b9s47                                 1/1     Running     1 (19m ago)   30m
+NAMESPACE       NAME                                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                  AGE
+falco           service/falco-falcosidekick                   ClusterIP   10.43.16.35     <none>        2801/TCP,2810/TCP        164m
+monitoring      service/falco-exporter                        NodePort    10.43.80.124    <none>        9443:30002/TCP           30m
+NAMESPACE       NAME                                                 DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+falco           daemonset.apps/falco                                 1         1         1       1            1           <none>                   164m
+monitoring      daemonset.apps/falco-exporter                        1         1         1       1            1           <none>                   30m
+NAMESPACE     NAME                                                READY   UP-TO-DATE   AVAILABLE   AGE
+falco         deployment.apps/falco-falcosidekick                 2/2     2            2           164m
+NAMESPACE     NAME                                                           DESIRED   CURRENT   READY   AGE
+falco         replicaset.apps/falco-falcosidekick-65db95d9cc                 2         2         2       164m
+NAMESPACE       NAME                                          COMPLETIONS   DURATION   AGE

@@ -7,7 +7,7 @@ echo "Install Falco on Host (via https://falco.org/docs/setup/packages/)"
 ssh root@$K8S_IP '\
 set -e
 echo ">>> Install GPG" ;\
-apt-get install gnupg2
+apt-get install gnupg2 -y; \
 echo ">>> Download Falco GPG key and save it locally" ;\
 curl -fsSL https://falco.org/repo/falcosecurity-packages.asc -o falco-archive-keyring.gpg; \
 echo ">>> Import Falco GPG key" ;\
@@ -28,8 +28,9 @@ FALCO_FRONTEND=noninteractive apt-get install -y falco;
 sudo apt-get install -y falco; 
 echo ">>> Finito!" ;\
 echo ">>> You can check the falco version with: falco --version" ;
-sudo systemctl enable falco
-sudo systemctl start falco
+falco --version
+# sudo systemctl enable falco
+# sudo systemctl start falco
 sudo systemctl status falco
 '
 
@@ -50,8 +51,7 @@ WantedBy=multi-user.target
 
 ===============================================================================
 sudo systemctl daemon-reload
-sudo systemctl enable falco
-sudo systemctl start falco
+sudo systemctl restart falco
 sudo systemctl status falco
 
 "
@@ -60,72 +60,191 @@ read -p "Make the manual changes to /etc/systemd/system/falco.service on the Hos
 press [Enter] key to continue..."
 
 line
-echo "Install Falco on Kubernetes using Helm"
+echo ">>> Create namespaces"
+kubectl $K create namespace falco
+kubectl $K create namespace monitoring
+# echo ">>> Add persistent volume "
+# kubectl $K apply -f $SUBMISSION/prometheus-storage-config.yaml
+
+echo ">>> Add repos to Helm"
 helm repo add falcosecurity https://falcosecurity.github.io/charts
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts $K 
+helm repo add grafana https://grafana.github.io/helm-charts $K 
 helm repo update
 
-# Install Falco using Helm with the custom values.yaml
-helm install --kubeconfig $PROJECT_DIR/kube_config_cluster.yml \
+line
+echo "Install Falco on Kubernetes using Helm"
+helm upgrade --install  $K \
   falco falcosecurity/falco \
-  --namespace falco --create-namespace --set falco.grpc.enabled=true --set falco.grpc_output.enabled=true
-# helm install falco falcosecurity/falco -f values.yaml --kubeconfig $PROJECT_DIR/kube_config_cluster.yml
+  --namespace falco \
+  --set falco.grpc.enabled=true --set falco.grpc_output.enabled=true  --set falcosidekick.enabled=true
+
+# helm install falco falcosecurity/falco -f values.yaml $K
 
 echo ">>> check if falco is running/healthy"
-echo "Namespaces:"
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get namespace
-echo "Pods:"
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get pods --namespace falco 
-echo "DaemonSets:"
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get ds --namespace falco 
+kubectl $K get all -A |  grep -iE 'NAME|falco'
 echo "Falco Service Account:"
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get ds falco --namespace falco -o yaml | grep serviceAcc
-echo "Falco exporter Log"
-kubectl logs -n falco -l app=falco-exporter --kubeconfig $PROJECT_DIR/kube_config_cluster.yml
-
+kubectl $K get ds falco --namespace falco -o yaml | grep serviceAcc
 
 echo "Check  falco.yaml in Pod: The grpc and grpc_output flags should be set to true"
-kubectl config set-cluster local --server=https://$K8S_IP:6443 --insecure-skip-tls-verify=true --kubeconfig $PROJECT_DIR/kube_config_cluster.yml
-POD_NAME=$(kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get pods --namespace falco -o jsonpath='{.items[0].metadata.name}')
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml exec -it $POD_NAME --namespace falco -c falco -- cat /etc/falco/falco.yaml | grep -A 5 -i grpc
+# kubectl config set-cluster local --server=https://$K8S_IP:6443 --insecure-skip-tls-verify=true $K
+FALCO_POD=$(kubectl $K get pods --namespace falco -o jsonpath='{.items[0].metadata.name}')
+output=$(kubectl $K exec -it $FALCO_POD --namespace falco -c falco -- cat /etc/falco/falco.yaml | grep -A 5 -i grpc )
+count=$(echo -e "$output" | grep -c "enabled: true")
+# Check if the count is exactly 2
+if [ "$count" -ne 2 ]; then
+  echo "Error: Expected 2 occurrences of 'enabled: true', but found $count."
+  echo -e "$output"
+  read -n 1 -s -r -p "Press any key to continue..."
+else
+  echo ">>> Falco is running with gRPC enabled"
+fi
 
 line
+echo "Install Prometheus, Grafana and Falco-Exporter on K8S using Helm"
+helm $K upgrade --install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+  --set grafana.service.type=NodePort \
+  --set grafana.service.nodePort=30001 \
+  --set prometheus.service.type=NodePort \
+  --set prometheus.service.nodePort=30090 \
+  --set prometheus.persistentVolume.enabled=false \
+  --set grafana.persistence.enabled=false
+#  
+helm $K upgrade --install falco-exporter falcosecurity/falco-exporter \
+  --namespace monitoring \
+  --set service.type=NodePort \
+  --set service.nodePort=30002 \
+  --set service.port=9443 \
+  --set service.targetPort=9443 \
+  --set service.clusterIP="" \
+  --set grafanaDashboard.enabled=true
+
+kubectl $K label service falco-exporter release=kube-prometheus-stack -n monitoring
+kubectl $K label svc falco-exporter app.kubernetes.io/name=falco-exporter -n monitoring
+kubectl $K apply -f falco-exporter-servicemonitor.yaml
+kubectl $K label servicemonitor falco-exporter release=kube-prometheus-stack -n monitoring --overwrite
+
+echo ">>> Exposed Ports:
+Expose Prometheus server on NodePort 30090:
+Expose Grafana on NodePort 30001:
+Expose Falco Exporter on NodePort 30002 (ensure clusterIP isn't set to None):
+"
+kubectl $K get all -n monitoring 
+read -p "Press [Enter] key to continue... if everything is ok"
+kubectl $K get all -n monitoring > monitoring-after_install.txt
+
+# Get the Grafana admin password 
+export GRAFANA_ADMIN_PASSWORD=$(kubectl $K get secret --namespace monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
+echo ">>>> Grafana URL: http://$K8S_IP:3000"
+echo ">>>> Grafana admin password: $GRAFANA_ADMIN_PASSWORD" # prom-operator
+
+# kubectl get svc grafana -n monitoring $K
+
+
+# kubectl expose svc prometheus-server --namespace monitoring --type=NodePort --name=prometheus-nodeport $K
+# kubectl expose svc grafana --namespace monitoring --type=NodePort --name=grafana-nodeport $K
+
+export FALCO_EXPORTER_POD=$(kubectl $K get pods -n monitoring --no-headers | grep '^falco-exporter' | awk '{print $1}')
+# kubectl expose pod $FALCO_EXPORTER_POD --namespace monitoring --type=NodePort --name=falco-exporter-nodeport $K
+kubectl $K get all -A |  grep -iE 'NAME|falco' > kube_falco_installed.txt
+
+
+export PROMETHEUS_POD=$(kubectl $K get pods -n monitoring --no-headers | grep '^prometheus-server' | awk '{print $1}'); echo "Prometheus Pod: $PROMETHEUS_POD"
+curl -s http://$K8S_IP:30090/api/v1/targets | jq '.data.activeTargets[] | select(.labels.job == "falco-exporter")'
+
+
+# line
+# echo " Edit the configmap prometheus-server to add the falco-exporter job"
+#   - job_name: 'falco-exporter'
+#     static_configs:
+#       - targets: ['falco-exporter.monitoring.svc.cluster.local:9443']
+# "
+# kubectl $K -n monitoring edit configmap prometheus-server
+
+# read -p "Press [Enter] key to continue... if everything is ok"
+# kubectl $K -n monitoring delete pod $PROMETHEUS_POD
+# export PROMETHEUS_POD=$(kubectl $K get pods -n monitoring --no-headers | grep '^prometheus-server' | awk '{print $1}'); echo "Prometheus Pod: $PROMETHEUS_POD"
+# curl -s http://$K8S_IP:30090/api/v1/targets | jq '.data.activeTargets[] | select(.labels.job == "falco-exporter")'
+
+
+line
+METRIC_FILE=$SUBMISSION/metrics_01_before_intruder.txt
+echo -e "Falco Exporter Metrics for falco events: " > $METRIC_FILE
+curl -s http://192.168.2.155:30002/metrics| grep ^falco_events >> $METRIC_FILE
+echo -e "Prometheus Metrics for falco events: " >> $METRIC_FILE
+curl -s "http://$K8S_IP:30090/api/v1/query?query=falco_events" | jq -r '.data.result[] | "\(.metric.rule)\t\(.value[1])"' >> $METRIC_FILE
+
+
 echo "Add intruder (via course)"
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml exec -it $POD_NAME --namespace falco -c falco -- /bin/bash -c '
+kubectl $K exec -it $FALCO_POD --namespace falco -c falco -- /bin/bash -c '
 if ! id "best_hacker" &>/dev/null; then
   adduser --disabled-password --gecos "" best_hacker
 fi
+cat /etc/passwd | grep best_hacker
+cat /etc/shadow | grep best_hacker
 '
 
-echo "You can check 'best_hacker' with: 
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml logs $POD_NAME --namespace falco -c falco| grep best_hacker
-"
+sleep 30
+METRIC_FILE=$SUBMISSION/metrics_02_after_intruder.txt
+echo -e "Falco Log after intruder: " > $METRIC_FILE
+kubectl $K logs $FALCO_POD --namespace falco -c falco| grep best_hacker >> $METRIC_FILE
+echo -e "Falco Exporter Metrics for falco events: " >> $METRIC_FILE
+curl -s http://$K8S_IP:30002/metrics| grep ^falco_events >> $METRIC_FILE
+echo -e "Prometheus Metrics for falco events: " >> $METRIC_FILE
+curl -s "http://$K8S_IP:30090/api/v1/query?query=falco_events" | jq -r '.data.result[] | "\(.metric.rule)\t\(.value[1])"' >>$METRIC_FILE
 
-read -p "Press [Enter] key to continue... with Grafana and Prometheus installation"
+
+line
+
+echo ">>>> Grafana URL: http://$K8S_IP:3000"
+echo ">>>> Grafana admin password: $GRAFANA_ADMIN_PASSWORD"
+
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 line
 echo "Install Grafana and Prometheus on Kubernetes using Helm"
-
 ## Install the CustomResourceDefinition resources separately
-# kubectl apply --kubeconfig $PROJECT_DIR/kube_config_cluster.yml  --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.3.1/cert-manager.yaml  
+kubectl apply $K  --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.17/cert-manager.yaml  
 ## Add the Jetstack Helm repository
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 ## Install the cert-manager Helm chart
-helm install --kubeconfig $PROJECT_DIR/kube_config_cluster.yml cert-manager jetstack/cert-manager  --namespace cert-manager --create-namespace 
+# helm upgrade --install  $K cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace
 
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get pods -A
+kubectl $K get pods -A
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add stable https://charts.helm.sh/stable
 helm repo update 
 ## Install kube-prometheus-stack, specific version
-helm install --kubeconfig $PROJECT_DIR/kube_config_cluster.yml prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace --generate-name 
+helm install $K prometheus-community/kube-prometheus-stack --namespace monitoring --create-namespace --generate-name 
 
 ## Check your Prometheus release name
-helm list --kubeconfig $PROJECT_DIR/kube_config_cluster.yml --all --all-namespaces
+helm list $K --all --all-namespaces
 ## You should have 6 Prometheus-related pods up. 
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get pods --namespace monitoring
+kubectl $K get pods --namespace monitoring
 ## Verify all pods are Running fine.
-kubectl --kubeconfig $PROJECT_DIR/kube_config_cluster.yml get pods -A
+kubectl $K get pods -A
 
 read -p "Press [Enter] key to continue... if everything is ok"
 
