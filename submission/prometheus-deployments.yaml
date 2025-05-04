@@ -16,14 +16,34 @@ spec:
     spec:
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.26.0
+          image: prom/prometheus:latest
+          ports:
+            - containerPort: 9090
           volumeMounts:
-            - name: prometheus-storage
-              mountPath: /prometheus
+            - mountPath: /etc/prometheus
+              name: prometheus-config
+            - mountPath: /var/lib/prometheus
+              name: prometheus-data
+              emptyDir: {}  # This ensures that data is not persisted across pod restarts
       volumes:
-        - name: prometheus-storage
-          persistentVolumeClaim:
-            claimName: prometheus-server
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config
+        - name: prometheus-data
+          emptyDir: {}  # Non-persistent storage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-server
+  namespace: monitoring
+spec:
+  ports:
+    - port: 9090
+      targetPort: 9090
+  selector:
+    app: prometheus
+
 
 ---
 apiVersion: apps/v1
