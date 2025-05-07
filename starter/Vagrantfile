@@ -14,32 +14,42 @@ Vagrant.configure("2") do |config|
   (1..NodeCount).each do |i|
     config.vm.define "node#{i}" do |node|
       # Use any version shown here https://app.vagrantup.com/opensuse/boxes/Leap-15.4.x86_64
-      config.vm.box = "opensuse/Leap-15.4.x86_64"
-      config.vm.box_version = "15.4.13.7"
+      config.vm.box = "opensuse/Leap-15.6.x86_64"
+      config.vm.box_version = "15.6.13.356"
       # Run ifconfig or ip a to find the appropriate interface
-      config.vm.network "public_network", :adapter=>3, bridge: "br1"
-      config.vm.network "forwarded_port", guest: 8080, host: 8080
-      config.vm.network "forwarded_port", guest: 9090, host: 9090
-      config.vm.network "forwarded_port", guest: 9100, host: 9100
-      config.vm.network "forwarded_port", guest: 9376, host: 9376
-      config.vm.network "forwarded_port", guest: 3000, host: 3000
+      # config.vm.network "public_network", :adapter=>3, bridge: "br1"
+      # This is for the cloud lab environment if you are setting up a local environment uncomment the above line. Comment the below line
+      config.vm.network "public_network", :adapter=>3, bridge: "eth0"
+      # config.vm.network "forwarded_port", guest: 8080, host: 8080
+      # config.vm.network "forwarded_port", guest: 9090, host: 9090
+      # config.vm.network "forwarded_port", guest: 9100, host: 9100
+      # config.vm.network "forwarded_port", guest: 9376, host: 9376
+      # config.vm.network "forwarded_port", guest: 3000, host: 3000
 
       # set the static IP for the vagrant box
       node.vm.network "private_network", ip: "192.168.50.101"
       # configure the parameters for VirtualBox provider
       node.vm.provider "virtualbox" do |v|
         v.name = "node#{i}"
-        v.memory = 4096
+        v.memory = 8192
         v.cpus = 2
       end
 
     config.vm.provision "shell", inline: <<-SHELL
+      # Install apparmor-parser
       sudo zypper --non-interactive install apparmor-parser
-      # install Docker
-      zypper --non-interactive install docker #python3-docker-compose
-      systemctl enable docker
-      usermod -G docker -a $USER
-      systemctl restart docker
+
+      # Install Docker
+      # zypper --non-interactive install docker
+      # systemctl enable docker
+      # usermod -G docker -a $USER
+      # systemctl restart docker
+
+      # Install kubectl
+      curl -LO "https://dl.k8s.io/release/v1.32.2/bin/linux/amd64/kubectl"
+      sudo mv kubectl /usr/local/bin/
+      sudo chmod +x /usr/local/bin/kubectl
+      echo "kubectl installed successfully."
     SHELL
     end
   end
